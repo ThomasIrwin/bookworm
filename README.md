@@ -1,2 +1,2 @@
 # bookworm
-A simple reading speed tracker
+A Personal Library Assistant
