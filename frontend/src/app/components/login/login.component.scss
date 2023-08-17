@@ -1,0 +1,7 @@
+@import '../../../styles.scss';
+
+$bw-primary: map-get($map: $md-bookworm, $key: 500);
+
+.login-card {
+    background-color: $bw-primary;
+}

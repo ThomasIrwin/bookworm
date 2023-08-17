@@ -1,1 +1,91 @@
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+$md-bookworm: (
+    50 : #f4f4fe,
+    100 : #e4e4fc,
+    200 : #d2d3fb,
+    300 : #c0c1f9,
+    400 : #b3b3f7,
+    500 : #a5a6f6,
+    600 : #9d9ef5,
+    700 : #9395f3,
+    800 : #8a8bf2,
+    900 : #797bef,
+    A100 : #ffffff,
+    A200 : #ffffff,
+    A400 : #ffffff,
+    A700 : #f1f1ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$md-bookworm-accent: (
+    50 : #e8eaf6,
+    100 : #c5cae9,
+    200 : #9fa8da,
+    300 : #7986cb,
+    400 : #5c6bc0,
+    500 : #3f51b5,
+    600 : #3949ab,
+    700 : #303f9f,
+    800 : #283593,
+    900 : #1a237e,
+    A100 : #8c9eff,
+    A200 : #536dfe,
+    A400 : #3d5afe,
+    A700 : #304ffe,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$bookworm-primary: mat.define-palette($md-bookworm);
+$bookworm-accent: mat.define-palette($md-bookworm-accent, A200, A100, A400);
+$bookworm-warn: mat.define-palette(mat.$red-palette);
+
+$bookworm-theme: mat.define-light-theme((
+  color: (
+    primary: $bookworm-primary,
+    accent: $bookworm-accent,
+    warn: $bookworm-warn,
+  )
+));
+
+@include mat.all-component-themes($bookworm-theme);
+
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
