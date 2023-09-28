@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "bookworm-f8f51": {
+      "hosting": {
+        "frontend": [
+          "bookworm-f8f51"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "bookworm-f8f51"
+  }
+}

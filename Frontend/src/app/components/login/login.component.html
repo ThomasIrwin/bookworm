@@ -1,0 +1,25 @@
+<div class="main-div">
+    <mat-card class="login-card">
+        <mat-card-header class="login-header">
+            <h1>Login</h1>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field class="login-field" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput [formControl]="email" required>
+                <mat-error *ngIf="email.invalid">{{ getEmailErrorMessage() }}</mat-error>
+                <input matInput>
+            </mat-form-field>
+
+            <mat-form-field class="login-field" appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput [formControl]="password" type="password" required>
+                <mat-error *ngIf="password.invalid">{{ getPasswordErrorMessage() }}</mat-error>
+                <input matInput>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" (click)="handleLoginClick(email, password)">Login</button>
+            <button mat-raised-button class="register-button" (click)="handleRegistrationClick(email, password)">Register</button>
+        </mat-card-content>
+    </mat-card>
+</div>

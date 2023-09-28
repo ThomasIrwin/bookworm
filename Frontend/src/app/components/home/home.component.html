@@ -1,0 +1,17 @@
+<mat-drawer-container class="container">
+    <mat-drawer class="sidenav" mode="side" opened>
+        <h3 class="title">Bookworm</h3>
+        <mat-divider></mat-divider>
+        <a class="tab">Library</a>
+        <a class="tab">Explore</a>
+        <a class="tab">Profile</a>
+        <a class="tab">Reading Plan</a>
+        <button mat-raised-button class="logout-btn" (click)="handleLogout()">Logout</button>
+    </mat-drawer>
+    <mat-drawer-content class="main">
+        <mat-toolbar class="toolbar-root">
+            <span class="navbar"></span>
+        </mat-toolbar>
+        <app-library></app-library>
+    </mat-drawer-content>
+</mat-drawer-container>
