@@ -2,6 +2,7 @@
 
 $bw-primary: map-get($map: $md-bookworm, $key: 500);
 $bw-selected: map-get($map: $md-bookworm, $key: 900);
+$bw-hover: map-get($map: $md-bookworm, $key: 200);
 
 .toolbar-root {
     background-color: $bw-primary;
@@ -35,6 +36,10 @@ $bw-selected: map-get($map: $md-bookworm, $key: 900);
 
 .tab:hover {
     cursor: pointer;
+    background-color: $bw-hover;
+}
+
+.selected {
     background-color: $bw-selected;
 }
 

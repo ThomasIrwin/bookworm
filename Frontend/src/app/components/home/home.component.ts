@@ -1,5 +1,7 @@
 import { Component, inject } from '@angular/core';
 
+import { NgIf } from '@angular/common';
+
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,8 +11,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { AuthService } from 'src/app/services/auth.service';
 
 import { LibraryComponent } from '../library/library.component';
+import { ExploreComponent } from '../explore/explore.component';
+import { ProfileComponent } from '../profile/profile.component';
+import { ReadingPlanComponent } from '../reading-plan/reading-plan.component';
 
-enum TAB_SELECTION {
+enum TabSelection {
   LIBRARY = 1,
   EXPLORE = 2,
   PROFILE = 3,
@@ -24,23 +29,41 @@ enum TAB_SELECTION {
   standalone: true,
   imports: [
     LibraryComponent,
+    ExploreComponent,
+    ProfileComponent,
+    ReadingPlanComponent,
     MatSidenavModule,
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     MatDividerModule,
+    NgIf,
   ],
 })
 export class HomeComponent {
   private auth = inject(AuthService);
+  public tab = TabSelection;
+  private selected_tab = this.tab.LIBRARY;
 
-  navigateToLibrary() {}
+  navigateToLibrary() {
+    this.selected_tab = this.tab.LIBRARY;
+  }
 
-  navigateToExplore() {}
+  navigateToExplore() {
+    this.selected_tab = this.tab.EXPLORE;
+  }
 
-  navigateToProfile() {}
+  navigateToProfile() {
+    this.selected_tab = this.tab.PROFILE;
+  }
 
-  navigateToReadingPlan() {}
+  navigateToReadingPlan() {
+    this.selected_tab = this.tab.READING_PLAN;
+  }
+
+  getCurrentTab() {
+    return this.selected_tab;
+  }
 
   handleLogout() {
     this.auth.logout();

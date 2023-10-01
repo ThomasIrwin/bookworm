@@ -2,16 +2,36 @@
     <mat-drawer class="sidenav" mode="side" opened>
         <h3 class="title">Bookworm</h3>
         <mat-divider></mat-divider>
-        <a class="tab">Library</a>
-        <a class="tab">Explore</a>
-        <a class="tab">Profile</a>
-        <a class="tab">Reading Plan</a>
+        <a class="tab"
+            (click)="navigateToLibrary()"
+            [class.selected]="getCurrentTab() == this.tab.LIBRARY">Library</a>
+        <a class="tab"
+            (click)="navigateToExplore()"
+            [class.selected]="getCurrentTab() == this.tab.EXPLORE">Explore</a>
+        <a class="tab"
+            (click)="navigateToProfile()"
+            [class.selected]="getCurrentTab() == this.tab.PROFILE">Profile</a>
+        <a class="tab"
+            (click)="navigateToReadingPlan()"
+            [class.selected]="getCurrentTab() == this.tab.READING_PLAN">Reading Plan</a>
         <button mat-raised-button class="logout-btn" (click)="handleLogout()">Logout</button>
     </mat-drawer>
     <mat-drawer-content class="main">
         <mat-toolbar class="toolbar-root">
             <span class="navbar"></span>
         </mat-toolbar>
-        <app-library></app-library>
+
+        <app-library
+            *ngIf="getCurrentTab() == this.tab.LIBRARY">
+        </app-library>
+        <app-explore
+            *ngIf="getCurrentTab() == this.tab.EXPLORE">
+        </app-explore>
+        <app-profile
+            *ngIf="getCurrentTab() == this.tab.PROFILE">
+        </app-profile>
+        <app-reading-plan
+            *ngIf="getCurrentTab() == this.tab.READING_PLAN">
+        </app-reading-plan>
     </mat-drawer-content>
 </mat-drawer-container>
