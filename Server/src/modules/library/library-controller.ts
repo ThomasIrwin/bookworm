@@ -6,6 +6,7 @@ let LibraryController = express.Router();
 let lib_service = new LibraryService();
 
 LibraryController.get("/:id", (req: Request, res: Response) => {
+    console.log('incoming request');
     const { params } = req;
     const { id } = params;
     try {

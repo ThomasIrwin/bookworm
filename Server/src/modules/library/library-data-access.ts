@@ -2,20 +2,15 @@ class LibraryDataClient {
     constructor() {}
 
     getUserLibraryData(user_id: string) {
-        console.log("user ID: " + user_id);
-        return {
-            status: "Success",
-            libraryData: {
-                user: "Cornelius Plumbottom",
-                books: [
-                    {
-                        title: "1984",
-                        author: "George Orwell",
-                        pages: 281
-                    }
-                ]
+        const library = [
+            {
+                title: "1984",
+                author: "George Orwell",
+                pages: 281
             }
-        };
+        ];
+        console.log('user id: ' + user_id + '. Library: ' + library);
+        return library;
     }
 }
 

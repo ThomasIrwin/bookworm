@@ -6,6 +6,7 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  UserCredential,
 } from '@angular/fire/auth';
 
 @Injectable({
@@ -15,9 +16,12 @@ export class AuthService {
   private router = inject(Router);
   private auth = inject(Auth);
 
+  private user: any = {};
+
   login(email: string, password: string) {
     signInWithEmailAndPassword(this.auth, email, password)
-      .then((user) => {
+      .then((result) => {
+        this.user = result.user;
         this.router.navigate(['home']);
       })
       .catch((err) => {
@@ -27,7 +31,8 @@ export class AuthService {
 
   register(email: string, password: string) {
     createUserWithEmailAndPassword(this.auth, email, password)
-      .then((user) => {
+      .then((result) => {
+        this.user = result.user;
         this.router.navigate(['home']);
       })
       .catch((err) => {
@@ -35,8 +40,13 @@ export class AuthService {
       });
   }
 
+  getUser(): UserCredential {
+    return this.user;
+  }
+
   logout() {
     signOut(this.auth);
+    this.user = {};
     this.router.navigate(['']);
   }
 }

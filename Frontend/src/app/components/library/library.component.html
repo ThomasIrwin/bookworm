@@ -1,1 +1,5 @@
 <p>library works!</p>
+
+<div *ngFor="let book of books | async">
+    {{ book | json }}
+</div>

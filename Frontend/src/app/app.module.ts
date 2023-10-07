@@ -26,6 +26,7 @@ import { ReadingPlanComponent } from './components/reading-plan/reading-plan.com
     ExploreComponent,
     ProfileComponent,
     ReadingPlanComponent,
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
