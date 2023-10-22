@@ -1,0 +1,45 @@
+@import '../../../styles.scss';
+
+$bw-primary: map-get($map: $md-bookworm, $key: 500);
+$bw-accent: map-get($map: $md-bookworm-accent, $key: 900);
+
+.main-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-card {
+    width: 25%;
+    margin-top: 10%; 
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+}
+
+.login-header {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    background-color: $bw-primary;
+}
+
+.login-field {
+    width: 100%;
+    margin-top: 5%;
+    margin-right: 10%;
+}
+
+.login-button {
+    float: right;
+}
+
+.anonymous-button {
+    float: right;
+    margin-right: 5%;
+}
+
+.google-login-button {
+    float: right;
+    margin-right: 5%;
+}

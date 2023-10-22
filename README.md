@@ -1,2 +1,2 @@
-# bookworm
+# Bookworm
 A Personal Library Assistant

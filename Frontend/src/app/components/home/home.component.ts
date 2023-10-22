@@ -65,6 +65,10 @@ export class HomeComponent {
     return this.selected_tab;
   }
 
+  getUsername() {
+    return this.auth.getUsername();
+  }
+
   handleLogout() {
     this.auth.logout();
   }

@@ -1,6 +1,6 @@
 import express from "express";
 
-import LibraryController from "../modules/library/library-controller";
+import LibraryController from "../modules/library/src/library-controller";
 
 let indexRouter = express.Router();
 

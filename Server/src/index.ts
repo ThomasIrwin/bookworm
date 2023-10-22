@@ -20,3 +20,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/v1", indexRouter);
 
 app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+
+export default app;

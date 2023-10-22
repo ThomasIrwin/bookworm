@@ -5,6 +5,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 
+import { Router } from '@angular/router';
+
 import { NgIf } from '@angular/common';
 
 import { AuthService } from 'src/app/services/auth.service';
@@ -25,12 +27,14 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent implements OnInit {
   private auth = inject(AuthService);
+  private router = inject(Router);
 
   email = new FormControl('', [
     Validators.email,
     Validators.required,
     Validators.minLength(5),
   ]);
+
   password = new FormControl('', [
     Validators.required,
     Validators.minLength(10),
@@ -66,13 +70,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  handleRegistrationClick(email: FormControl, password: FormControl) {
-    if (email.valid && password.valid) {
-      const email_as_string: string = email.value;
-      const password_as_string: string = password.value;
-      this.auth.register(email_as_string, password_as_string);
-    } else {
-      console.log('email or password is invalid');
-    }
+  redirectToRegistration() {
+    this.router.navigate(['register']);
   }
 }

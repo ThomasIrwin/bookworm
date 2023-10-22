@@ -1,28 +1,37 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NgFor } from '@angular/common';
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { NgFor, AsyncPipe, JsonPipe } from '@angular/common';
 
-import { Book } from 'src/app/data_model/book.model';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+
+import { LibraryService } from 'src/app/services/library.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Book } from '../../../../../DataModel/Book';
 
 @Component({
   selector: 'app-library',
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.scss'],
   standalone: true,
-  imports: [NgFor, AsyncPipe, JsonPipe],
+  imports: [NgFor, AsyncPipe, JsonPipe, MatButtonModule, MatCardModule],
 })
 export class LibraryComponent {
   books: Observable<Book[]> | undefined;
 
-  readonly ROOT_URL = 'http://localhost:8080/api/v1/library/12345';
-
-  constructor(private http: HttpClient) {
-    this.getLibrary();
+  constructor(
+    private lib_service: LibraryService,
+    private auth_service: AuthService
+  ) {
+    this.setUserLibrary();
   }
 
-  getLibrary() {
-    this.books = this.http.get<Book[]>(this.ROOT_URL);
+  setUserLibrary(): void {
+    const user_id: string = this.auth_service.getUserId();
+    if (user_id !== '') {
+      this.books = this.lib_service.getUserLibrary(user_id);
+    } else {
+      console.log('No user currently signed in');
+    }
   }
 }

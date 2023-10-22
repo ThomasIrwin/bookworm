@@ -1,1 +1,32 @@
-<p>register works!</p>
+<div class="main-div">
+    <mat-card class="login-card">
+        <mat-card-header class="login-header">
+            <h1>Register</h1>
+        </mat-card-header>
+        <mat-card-content>
+            <mat-form-field class="login-field" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput [formControl]="email" required>
+                <mat-error *ngIf="email.invalid">{{ getEmailErrorMessage() }}</mat-error>
+                <input matInput>
+            </mat-form-field>
+
+            <mat-form-field class="login-field" appearance="outline">
+                <mat-label>Username</mat-label>
+                <input matInput [formControl]="username" required>
+                <mat-error *ngIf="username.invalid">{{ getUsernameErrorMessage() }}</mat-error>
+                <input matInput>
+            </mat-form-field>
+
+            <mat-form-field class="login-field" appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput [formControl]="password" type="password" required>
+                <mat-error *ngIf="password.invalid">{{ getPasswordErrorMessage() }}</mat-error>
+                <input matInput>
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" (click)="handleRegistrationClick(email, username, password)">Register</button>
+            <button mat-raised-button class="login-button" (click)="redirectToLogin()">Login</button>
+        </mat-card-content>
+    </mat-card>
+</div>
