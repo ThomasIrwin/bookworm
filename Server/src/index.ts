@@ -1,8 +1,8 @@
-import express, { Express } from "express";
-import cors from 'cors';
 import bodyParser from "body-parser";
-import helmet from "helmet";
+import cors from 'cors';
 import dotenv from "dotenv";
+import express, { Express } from "express";
+import helmet from "helmet";
 
 import indexRouter from "./routes/routes";
 

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { DocumentReference, DocumentSnapshot, Query, QuerySnapshot, collection, doc, getDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
 import { Book } from "../../../../../DataModel/Book";
 
 const firebaseConfig = {
@@ -17,29 +17,53 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 class LibraryDataClient {
-    constructor() {}
+    constructor() { }
 
     async getUserLibraryData(user_id: string): Promise<Book[] | string> {
         let library: Book[] = [];
-        let user = await getDoc(doc(db, "users", `${user_id}`));
 
-        if (user.exists()) {
-            const user_lib = user.data().books;
-            Object.keys(user_lib).forEach(fs_book => {
-                let book: Book = {
-                    title: user_lib[fs_book].title,
-                    author: user_lib[fs_book].author,
-                    pages: user_lib[fs_book].pages,
-                    cover_image_url: user_lib[fs_book].cover_image_url
-                };
+        const userRef = doc(db, "users", `${user_id}`);
+        const libQuery: Query = query(
+            collection(db, "libraries"),
+            where("user_id", "==", userRef)
+        );
+        const userLibraryQuerySnapshot: QuerySnapshot = await getDocs(libQuery);
 
+        if (!userLibraryQuerySnapshot.empty) {
+            // user_id is unique so first array element is the user's library
+            const userLibraryDataList: Array<DocumentReference> = userLibraryQuerySnapshot.docs[0].get("book_ids");
+
+            for (let i = 0; i < userLibraryDataList.length; i++) {
+                const bookSnapshot: DocumentSnapshot = await getDoc(userLibraryDataList[i]);
+
+                let book: Book = this.convertBookSnapshotToCommonFormat(bookSnapshot);
                 library.push(book);
-            });
+            }
+
             return library;
         }
+        
         else {
             return "";
         }
+    }
+
+    private convertBookSnapshotToCommonFormat(bookSnapshot: DocumentSnapshot): Book {
+        let commonFormatBoot: Book = {
+            ISBN: bookSnapshot.get("ISBN"),
+            authors: bookSnapshot.get("authors"),
+            book_id: bookSnapshot.get("book_id"),
+            cover_image: bookSnapshot.get("cover_image"),
+            description: bookSnapshot.get("description"),
+            genres: bookSnapshot.get("genres"),
+            language: bookSnapshot.get("language"),
+            page_count: bookSnapshot.get("page_count"),
+            publication_date: bookSnapshot.get("publication_date"),
+            publisher: bookSnapshot.get("publisher"),
+            title: bookSnapshot.get("title")
+        };
+
+        return commonFormatBoot;
     }
 }
 

@@ -1,0 +1,20 @@
+@import '../../../styles.scss';
+
+$bw-primary: map-get($map: $md-bookworm, $key: 500);
+
+.title {
+  text-align: center;
+}
+
+.searchbar {
+  margin-left: 25%;
+  width: 50%;
+}
+
+.search-icon {
+  color: $bw-primary;
+}
+
+.search-icon:hover {
+  cursor: pointer;
+}
