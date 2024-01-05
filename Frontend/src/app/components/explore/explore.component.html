@@ -2,7 +2,9 @@
 
 <div class="parent">
   <mat-form-field class="searchbar">
-    <input matInput class="input">
-    <mat-icon matSuffix class="search-icon">search</mat-icon>
+    <input matInput class="input" [formControl]="explore_searchbar_user_input">
+    <mat-error *ngIf="explore_searchbar_user_input.invalid">{{ getSearchErrorMessage() }}</mat-error>
+    <mat-icon matSuffix class="search-icon" (click)="handleSearchClick(explore_searchbar_user_input)">search</mat-icon>
+    <input matInput>
   </mat-form-field>
 </div>
