@@ -2,16 +2,16 @@ import { Component, inject } from '@angular/core';
 
 import { NgIf } from '@angular/common';
 
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AuthService } from 'src/app/services/auth.service';
 
-import { LibraryComponent } from '../library/library.component';
 import { ExploreComponent } from '../explore/explore.component';
+import { LibraryComponent } from '../library/library.component';
 import { ProfileComponent } from '../profile/profile.component';
 import { ReadingPlanComponent } from '../reading-plan/reading-plan.component';
 
@@ -41,7 +41,7 @@ enum TabSelection {
   ],
 })
 export class HomeComponent {
-  private auth = inject(AuthService);
+  private _auth = inject(AuthService);
   public tab = TabSelection;
   private selected_tab = this.tab.LIBRARY;
 
@@ -66,10 +66,10 @@ export class HomeComponent {
   }
 
   getUsername() {
-    return this.auth.getUsername();
+    return this._auth.getUsername();
   }
 
   handleLogout() {
-    this.auth.logout();
+    this._auth.logout();
   }
 }
