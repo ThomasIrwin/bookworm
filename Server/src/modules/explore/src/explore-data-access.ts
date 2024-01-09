@@ -1,10 +1,15 @@
+import { Axios } from "axios";
 
 class ExploreDataClient {
-    constructor() { }
+  private _axios: Axios;
 
-    getSearchResults(user_input: string) {
-      console.log("explore data client: ", user_input);
-    }
+  constructor() {
+    this._axios = new Axios();
+  }
+
+  getSearchResults(user_input: string) {
+    console.log("getting search results...");
+  }
 }
 
 export default ExploreDataClient;
