@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,7 +14,7 @@ import { Book } from '../../../../../DataModel/Book';
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
   standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, NgIf]
+  imports: [MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule, NgIf, NgFor, AsyncPipe]
 })
 export class ExploreComponent {
   private _explore_service = inject(ExploreService);
@@ -33,10 +33,7 @@ export class ExploreComponent {
     if (explore_searchbar_user_input.valid) {
       const input_as_string: string = explore_searchbar_user_input.value;
       if (input_as_string !== "" || input_as_string === undefined) {
-        this._explore_service.getSearchResults(input_as_string)
-        .subscribe((result) => {
-          console.log(result);
-        })
+        this.search_results = this._explore_service.getSearchResults(input_as_string);
       } else {
         console.log("Empty or undefined search query");
       }

@@ -8,3 +8,7 @@
     <input matInput>
   </mat-form-field>
 </div>
+
+<div *ngFor="let item of search_results | async">
+  <p> {{ item.title }} by {{ item.authors[0] }}</p>
+</div>

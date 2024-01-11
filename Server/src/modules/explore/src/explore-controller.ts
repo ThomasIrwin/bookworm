@@ -11,7 +11,20 @@ ExploreController.get("/", (req: Request, res: Response) => {
   let { query } = req;
   let { input } = query;
   let input_as_string: string | undefined = input?.toString();
-  explore_service.getSearchResults(input_as_string);
+  try {
+    explore_service.getSearchResults(input_as_string)
+      .then((response) => {
+        if (response === "") {
+          res.status(400).json({ status: "error", message: "Search Unsuccessful" })
+        }
+        else {
+          res.status(200).json(response);
+        }
+      });
+  }
+  catch (error: any) {
+    res.json({ status: "error", message: error.message });
+  }
 });
 
 export default ExploreController;
