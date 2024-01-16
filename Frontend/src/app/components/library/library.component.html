@@ -1,5 +1,5 @@
 <div *ngFor="let book of books | async">
-    <mat-card class="book-card">
-        <img mat-card-image class="cover-img" src="{{ book.cover_image }}" alt="Image of book cover">
-      </mat-card>
+  <mat-card class="book-card">
+    <app-book-display [book_data]="book"></app-book-display>
+  </mat-card>
 </div>

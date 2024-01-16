@@ -8,12 +8,14 @@ import { AuthService } from "src/app/services/auth.service";
 import { LibraryService } from "src/app/services/library.service";
 import { Book } from "../../../../../DataModel/Book";
 
+import { BookDisplayComponent } from "../book-display/book-display.component";
+
 @Component({
   selector: "app-library",
   templateUrl: "./library.component.html",
   styleUrls: ["./library.component.scss"],
   standalone: true,
-  imports: [NgFor, AsyncPipe, MatCardModule],
+  imports: [NgFor, AsyncPipe, MatCardModule, BookDisplayComponent],
 })
 export class LibraryComponent {
   books: Observable<Book[]> | undefined;
