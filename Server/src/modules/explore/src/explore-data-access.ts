@@ -1,6 +1,6 @@
 import axios from "axios";
 import dotenv from "dotenv";
-import { Book } from "../../../../../DataModel/Book";
+import { Book } from "../../../DataModel/Book";
 
 dotenv.config();
 

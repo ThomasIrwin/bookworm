@@ -8,7 +8,7 @@ import indexRouter from "./routes/routes";
 
 dotenv.config();
 
-const PORT = process.env.port || 8080;
+const PORT = process.env.PORT || 8888;
 
 const app: Express = express();
 

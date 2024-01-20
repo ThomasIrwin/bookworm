@@ -1,4 +1,4 @@
-import { Book } from "../../../../../DataModel/Book";
+import { Book } from "../../../DataModel/Book";
 import ExploreDataClient from "./explore-data-access";
 
 class ExploreService {

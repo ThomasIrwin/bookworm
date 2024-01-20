@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { DocumentReference, DocumentSnapshot, Query, QuerySnapshot, collection, doc, getDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
-import { Book } from "../../../../../DataModel/Book";
+import { Book } from "../../../DataModel/Book";
 
 const firebaseConfig = {
     projectId: "bookworm-f8f51",
