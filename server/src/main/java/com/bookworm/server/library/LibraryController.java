@@ -1,7 +1,12 @@
 package com.bookworm.server.library;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.bookworm.server.library.entities.Book;
+import com.bookworm.server.library.services.LibraryService;
 
 @RestController
 public class LibraryController {
@@ -12,7 +17,7 @@ public class LibraryController {
     }
 
     @GetMapping("/")
-    public String getUserLibrary() {
+    public List<Book> getUserLibrary() {
         return libraryService.getUserLibrary();
     }
 
