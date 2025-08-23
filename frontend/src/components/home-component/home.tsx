@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardTitle } from "../ui/card";
+import { Card, CardFooter, CardTitle } from "../ui/card";
 
 import Header from "../header/header"
 import { apiService } from "@/services/bookworm-api";
@@ -28,15 +28,14 @@ export default function Home() {
   return (
     <>
       <Header />
-      { userLibrary.map( book => (
-        <Card key={ book.id } className="items-center max-w-50 m-5">
-          <CardTitle>{ book.title }</CardTitle>
-          <CardDescription>By { book.author }</CardDescription>
-          <CardContent>
-            <p>{ book.description }</p>
-          </CardContent>
-        </Card>
-      ))}
+      <main className="flex flex-wrap">
+        { userLibrary.map( book => (
+          <Card key={ book.id } className="items-center max-w-40 min-h-60 m-5">
+            <CardTitle>{ book.title }</CardTitle>
+            <CardFooter>By { book.author }</CardFooter>
+          </Card>
+        ))}
+      </main>
     </>
   )
 }
