@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
 import { Card, CardFooter, CardTitle } from "../ui/card";
 
 import Header from "../header/header"
 import { apiService } from "@/services/bookworm-api";
 import type { Book } from "@/interfaces/Book";
 
-export default function Home() {
+function Home() {
   const [userLibrary, setUserLibrary] = useState<Book[]>([]);
 
   useEffect( () => {
@@ -39,3 +40,7 @@ export default function Home() {
     </>
   )
 }
+
+export default withAuthenticationRequired( Home, {
+  onRedirecting: () => <main> Redirecting to Login... </main>
+})

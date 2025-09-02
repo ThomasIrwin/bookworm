@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import { Input } from '../ui/input';
 
+import LogoutButton from "../landing-components/logout-button";
+
 export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -30,7 +32,9 @@ export default function Header() {
         </Tabs>
 
         {/* Search Bar */}
-        <Input className='ml-[60px]' placeholder='Search...' />
+        <Input className='ml-[20px] mr-[20px]' placeholder='Search...' />
+
+        <LogoutButton />
       </div>
     </header>
   );

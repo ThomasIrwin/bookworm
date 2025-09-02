@@ -1,11 +1,14 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 import { apiService } from './services/bookworm-api';
-import { Link } from 'react-router-dom';
-import { Button } from './components/ui/button';
+import  LoginButton  from '@/components/landing-components/login-button';
 
 function App() {
   const [apiStatus, setApiStatus] = useState<string>('Loading...');
+  const { isAuthenticated, isLoading } = useAuth0();
+  const navigate = useNavigate();
 
   useEffect( () => {
     apiService.healthCheck()
@@ -22,25 +25,23 @@ function App() {
       })
   }, []);
 
-  return (
-    <main className='landing'>
-      <header className='landing-header'>
-        <h1
-          className=
-            'flex items-center justify-center text-[70px]'
-          > Boookworm </h1>
-        <p
-          className='flex items-center justify-center'
-        >Server status: { apiStatus } </p>
+  useEffect( () => {
+    if (isAuthenticated && !isLoading) {
+      navigate('/home');
+    }
+  }, [isAuthenticated, isLoading, navigate])
 
-          <div className='flex min-h-[100px] flex-col items-center justify-center'>
-            <Link to={'/home'}>
-              <Button> Go Home </Button>
-            </Link>
-          </div>
+  return (
+    <main className='flex justify-center'>
+      <header>
+        <h1 className='text-[70px]'> Boookworm </h1>
+        <p className='flex justify-center mb-5'>Server status: { apiStatus } </p>
+        <div className='flex justify-center'>
+          <LoginButton />
+        </div>
       </header>
     </main>
   )
 }
 
-export default App
+export default App;
