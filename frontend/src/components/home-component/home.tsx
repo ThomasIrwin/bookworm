@@ -8,27 +8,29 @@ import Header from "../header/header";
 
 function Home() {
   const [userLibrary, setUserLibrary] = useState<Book[]>([]);
-  const { user, getAccessTokenSilently } = useAuth0();
+  const { user, isLoading } = useAuth0();
 
-  const sendUserDataToServer = async () => {
-    try {
-      const token = await getAccessTokenSilently();
-      apiService.sendUserDataToServer(token)
-        .then(response => {
-          console.log("Success: ", response.data);
-        })
-        .catch(error => {
-          console.error(error);
-        })
-    } catch (error) {
-      console.error("Error: ", error);
-    }
+  const sendUserDataToServer = () => {
+    apiService.sendUserDataToServer(user?.sub!, user?.email!)
+      .then(response => {
+        console.log("Success: ", response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      })
   }
-  sendUserDataToServer();
 
   useEffect(() => {
-    apiService.getUserLibrary()
+    if (user?.sub && user?.email) {
+      sendUserDataToServer();
+    }
+  }, [isLoading, user?.sub, user?.email]);
+
+  useEffect(() => {
+    apiService.getUserLibrary(user?.sub!)
       .then(response => {
+        console.log(response.data);
+        // PCK UP HERE, NEED TO RE-MAP THE DATA CORRECTLY
         const user_library_data: Book[] =
           response.data.map((raw_book_data: any) => ({
             id: raw_book_data.id,
@@ -41,7 +43,7 @@ function Home() {
       .catch(error => {
         console.error("Error: ", error);
       })
-  }, []);
+  }, [isLoading, user?.sub]);
 
   return (
     <>

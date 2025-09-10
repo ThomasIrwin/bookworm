@@ -10,16 +10,15 @@ const api = axios.create({
 });
 
 export const apiService = {
-    getUserLibrary: () => api.get('/'),
-    healthCheck: () => api.get('/health'),
-    sendUserDataToServer: (accessToken: string) => api.put('/user/profile', {}, {
-        params: {
-            accessToken: accessToken,
-        }
-    }),
+    getAllBooks: () => api.get('/books/'),
+    healthCheck: () => api.get('/books/health'),
+
+    sendUserDataToServer: (auth0Id: string, email: string) => api.post('/user/save', { auth0Id: auth0Id, email: email }),
+
+    getUserLibrary: (auth0Id: string) => api.get("/userbooks/", {params: { user_id: auth0Id }}),
 
     // TODO
-    addBookToUserLibrary: (book: Book) => api.put('/book', book),
+    addBookToUserLibrary: (book: Book) => api.put('userbooks/addbook', book),
 }
 
 export default api;

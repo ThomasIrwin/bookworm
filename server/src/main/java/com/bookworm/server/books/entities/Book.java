@@ -1,4 +1,9 @@
-package com.bookworm.server.library.entities;
+package com.bookworm.server.books.entities;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.bookworm.server.userbooks.entities.UserBook;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +30,9 @@ public class Book {
     @Size(max = 1000)
     @Column(length = 1000)
     private String description;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<UserBook> userBooks = new ArrayList<>();
 
     public Book() {}
 

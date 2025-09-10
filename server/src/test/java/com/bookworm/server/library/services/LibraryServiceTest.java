@@ -13,8 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.bookworm.server.library.entities.Book;
-import com.bookworm.server.library.repository.BookRepository;
+import com.bookworm.server.books.entities.Book;
+import com.bookworm.server.books.repository.BookRepository;
+import com.bookworm.server.books.services.BookService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,7 +26,7 @@ public class LibraryServiceTest {
     private BookRepository mockBookRepository;
 
     @InjectMocks
-    private LibraryService libraryService;
+    private BookService libraryService;
 
     private Book testBook1;
     private Book testBook2;
@@ -50,7 +51,7 @@ public class LibraryServiceTest {
         List<Book> expectedBooks = Arrays.asList(testBook1, testBook2);
         when(mockBookRepository.findAll()).thenReturn(expectedBooks);
 
-        List<Book> actualBooks = libraryService.getUserLibrary();
+        List<Book> actualBooks = libraryService.getAllBooks();
 
         assertThat(actualBooks).hasSize(2);
         assertThat(actualBooks).containsExactly(testBook1, testBook2);

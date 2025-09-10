@@ -1,12 +1,14 @@
 package com.bookworm.server.library.repository;
 
 
-import com.bookworm.server.library.entities.Book;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import com.bookworm.server.books.entities.Book;
+import com.bookworm.server.books.repository.BookRepository;
 
 import java.util.List;
 

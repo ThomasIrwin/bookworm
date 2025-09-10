@@ -7,8 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.bookworm.server.library.entities.Book;
-import com.bookworm.server.library.services.LibraryService;
+import com.bookworm.server.books.BooksController;
+import com.bookworm.server.books.entities.Book;
+import com.bookworm.server.books.services.BookService;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,14 +19,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.Arrays;
 
-@WebMvcTest(LibraryController.class)
+@WebMvcTest(BooksController.class)
 public class LibraryControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private LibraryService libraryService;
+    private BookService libraryService;
 
     private Book testBook1;
     private Book testBook2;
@@ -47,7 +48,7 @@ public class LibraryControllerTest {
 
     @Test
     public void testGetUserLibrary() throws Exception {
-        when(libraryService.getUserLibrary()).thenReturn(Arrays.asList(testBook1, testBook2));
+        when(libraryService.getAllBooks()).thenReturn(Arrays.asList(testBook1, testBook2));
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())

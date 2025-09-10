@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.bookworm.server.library.entities.Book;
-import com.bookworm.server.library.repository.BookRepository;
+import com.bookworm.server.books.entities.Book;
+import com.bookworm.server.books.repository.BookRepository;
 
 @SpringBootApplication
 public class ServerApplication {
@@ -21,6 +21,7 @@ public class ServerApplication {
 			Book testBook1 = new Book("Brave New World", "Aldous Huxley", "Prophetic dystopian novel from 1932 about future society");
         	Book testBook2 = new Book("Masters of the Air", "Donald Miller", "Gripping telling of the WWII bomber pilots who braved the skies over Germany");
         	Book testBook3 = new Book("The Rise of Theodore Roosevelt", "Edmund Morris", "Depicts the early life of one of the most influential presidents in U.S. History");
+			
 			Book testBook4 = new Book("The Rise of Theodore Roosevelt", "Edmund Morris", "Depicts the early life of one of the most influential presidents in U.S. History");
 			Book testBook5 = new Book("The Rise of Theodore Roosevelt", "Edmund Morris", "Depicts the early life of one of the most influential presidents in U.S. History");
 			Book testBook6 = new Book("The Rise of Theodore Roosevelt", "Edmund Morris", "Depicts the early life of one of the most influential presidents in U.S. History");
