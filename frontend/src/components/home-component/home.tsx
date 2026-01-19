@@ -29,13 +29,13 @@ function Home() {
   useEffect(() => {
     apiService.getUserLibrary(user?.sub!)
       .then(response => {
-        console.log(response.data);
-        // PCK UP HERE, NEED TO RE-MAP THE DATA CORRECTLY
+        console.log(response.data[0]);
+        // TODO: NEED TO RE-MAP THE DATA CORRECTLY
         const user_library_data: Book[] =
           response.data.map((raw_book_data: any) => ({
-            id: raw_book_data.id,
-            title: raw_book_data.title,
-            author: raw_book_data.author,
+            id: raw_book_data.book.id,
+            title: raw_book_data.book.title,
+            author: raw_book_data.book.author,
             description: raw_book_data.description,
           }))
         setUserLibrary(user_library_data);
