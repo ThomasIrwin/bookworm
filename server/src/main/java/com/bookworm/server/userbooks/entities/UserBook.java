@@ -1,10 +1,5 @@
 package com.bookworm.server.userbooks.entities;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import com.bookworm.server.books.entities.Book;
 import com.bookworm.server.userbooks.enums.ReadingStatus;
 import com.bookworm.server.users.entities.User;
@@ -40,22 +35,6 @@ public class UserBook {
     @Column(nullable = false)
     private ReadingStatus readingStatus;
 
-    private Integer currentPage = 0;
-    private LocalDateTime startedReadingAt;
-    private LocalDateTime finishedReadingAt;
-    private LocalDateTime addedToShelfAt;
-
-    @Column(length = 3000)
-    private String personalNotes;
-
-    private Integer rating; // 1-5 stars
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
     // Constructors
     public UserBook() {
     }
@@ -64,7 +43,6 @@ public class UserBook {
         this.user = user;
         this.book = book;
         this.readingStatus = status;
-        this.addedToShelfAt = LocalDateTime.now();
     }
 
     // Getters & Setters
@@ -98,70 +76,6 @@ public class UserBook {
 
     public void setStatus(ReadingStatus status) {
         this.readingStatus = status;
-    }
-
-    public Integer getCurrentPage() {
-        return currentPage;
-    }
-
-    public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage;
-    }
-
-    public LocalDateTime getStartedReadingAt() {
-        return startedReadingAt;
-    }
-
-    public void setStartedReadingAt(LocalDateTime startedReadingAt) {
-        this.startedReadingAt = startedReadingAt;
-    }
-
-    public LocalDateTime getFinishedReadingAt() {
-        return finishedReadingAt;
-    }
-
-    public void setFinishedReadingAt(LocalDateTime finishedReadingAt) {
-        this.finishedReadingAt = finishedReadingAt;
-    }
-
-    public LocalDateTime getAddedToShelfAt() {
-        return addedToShelfAt;
-    }
-
-    public void setAddedToShelfAt(LocalDateTime addedToShelfAt) {
-        this.addedToShelfAt = addedToShelfAt;
-    }
-
-    public String getPersonalNotes() {
-        return personalNotes;
-    }
-
-    public void setPersonalNotes(String personalNotes) {
-        this.personalNotes = personalNotes;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
 }

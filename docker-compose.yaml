@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: bookworm-db
+    environment:
+      POSTGRES_DB: bookworm
+      POSTGRES_USER: bookworm_dev
+      POSTGRES_PASSWORD: dev_pwd
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - bookworm-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U bookworm_dev -d bookworm" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+    driver: local
+
+networks:
+  bookworm-network:
+    driver: bridge

@@ -1,14 +1,21 @@
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Menu } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
-import { Input } from '../ui/input';
 
-import LogoutButton from "../landing-components/logout-button";
+import LogoutButton from "./logout-button";
 
-export default function Header() {
+import { Input } from "@/components/ui/input";
+import AddBookDialog from './add-book-dialog';
+
+interface HeaderProps {
+  onBookAdded: () => void;
+}
+
+export default function Header({ onBookAdded }: HeaderProps) {
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="flex h-14 items-center mr-[20px]">
         {/* Mobile menu button - only visible on mobile */}
         <button className="inline-flex items-center justify-center rounded-md p-2 text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 md:hidden">
           <Menu className="h-5 w-5" />
@@ -23,17 +30,18 @@ export default function Header() {
         </div>
 
         <Tabs defaultValue="library" className="w-[400px]">
-            <TabsList>
-                <TabsTrigger value="library">Library</TabsTrigger>
-                <TabsTrigger value="stats">Stats</TabsTrigger>
-                <TabsTrigger value="plan">Plan</TabsTrigger>
-                <TabsTrigger value="friends">Friends</TabsTrigger>
-            </TabsList>
+          <TabsList>
+            <TabsTrigger value="home">Home</TabsTrigger>
+            <TabsTrigger value="library">Library</TabsTrigger>
+            <TabsTrigger value="stats">Stats</TabsTrigger>
+            <TabsTrigger value="plan">Plan</TabsTrigger>
+            <TabsTrigger value="friends">Friends</TabsTrigger>
+          </TabsList>
         </Tabs>
 
         {/* Search Bar */}
-        <Input className='ml-[20px] mr-[20px]' placeholder='Search...' />
-
+        <Input className='ml-[2rem] mr-[20rem] max-w-lg' placeholder='Search...' />
+        <AddBookDialog onBookAdded={onBookAdded} />
         <LogoutButton />
       </div>
     </header>

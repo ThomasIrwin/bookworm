@@ -1,0 +1,28 @@
+
+spring:
+  application:
+    name: server
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bookworm
+    username: bookworm_dev
+    password: dev_pwd
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: dev-ulixqg71ihyco2h1.us.auth0.com
+          audiences: http://localhost:8080/api/v1
+
+server:
+  servlet:
+    context-path: /api/v1
+  port: 8080

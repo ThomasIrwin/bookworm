@@ -1,24 +1,25 @@
-import type { Book } from '@/interfaces/Book';
+import type { AddBookRequest } from '@/interfaces/Book';
 import axios from 'axios';
 
-const api = axios.create({
+export const api = axios.create({
     baseURL:
-        import.meta.env.BOOKWORM_API_URL || 'http://localhost:8080',
+        import.meta.env.BOOKWORM_API_URL || 'http://localhost:8080/api/v1',
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
 export const apiService = {
+    // books
     getAllBooks: () => api.get('/books/'),
     healthCheck: () => api.get('/books/health'),
 
-    sendUserDataToServer: (auth0Id: string, email: string) => api.post('/user/save', { auth0Id: auth0Id, email: email }),
+    // users
+    sendUserDataToServer: () => api.post('/users/me'),
 
-    getUserLibrary: (auth0Id: string) => api.get("/userbooks/", {params: { user_id: auth0Id }}),
-
-    // TODO
-    addBookToUserLibrary: (book: Book) => api.put('userbooks/addbook', book),
+    // userbooks
+    getUserBooks: () => api.get("/userbooks/"),
+    addBookToUserLibrary: (book: AddBookRequest) => api.put('userbooks/add-book', book),
 }
 
 export default api;

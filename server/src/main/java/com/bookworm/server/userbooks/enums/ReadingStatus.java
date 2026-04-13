@@ -2,16 +2,16 @@ package com.bookworm.server.userbooks.enums;
 
 public enum ReadingStatus {
     WANT_TO_READ("Want to Read"),
-    CURRENTLY_READING("Currently Reading"),
+    IN_PROGRESS("In Progress"),
     FINISHED("Finished"),
-    PD("Put Down");
-    
+    PUT_DOWN("Put Down");
+
     private final String displayName;
-    
+
     ReadingStatus(String displayName) {
         this.displayName = displayName;
     }
-    
+
     public String getDisplayName() {
         return displayName;
     }

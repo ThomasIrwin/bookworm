@@ -1,25 +1,32 @@
 package com.bookworm.server.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.bookworm.server.users.dto.UserRequest;
-import com.bookworm.server.users.entities.User;
-import com.bookworm.server.users.repository.UserRepository;
+import com.bookworm.server.users.services.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
-    
-    @Autowired
-    private UserRepository userRepository;
-    
-    @PostMapping("/save")
-    @Transactional
-    public ResponseEntity<User> saveUser(@RequestBody UserRequest userRequest) {
-        User user = userRepository.upsertUser(userRequest.getAuth0Id(), userRequest.getEmail());
-        return ResponseEntity.ok(user);
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/me")
+    public ResponseEntity<String> getOrSaveCurrentUser(Authentication auth) {
+        JwtAuthenticationToken token = (JwtAuthenticationToken) auth;
+        String auth0Id = token.getToken().getClaimAsString("sub");
+
+        boolean userWasCreated = userService.ensureUserSaved(auth0Id);
+        return userWasCreated
+                ? ResponseEntity.status(HttpStatus.CREATED).build()
+                : ResponseEntity.status(HttpStatus.OK).build();
     }
 }
