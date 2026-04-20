@@ -26,8 +26,6 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("Security Filter Chain called");
-
         http.csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
@@ -38,7 +36,6 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        System.out.println("JWT Decoder called");
         NimbusJwtDecoder decoder = JwtDecoders.fromIssuerLocation("https://dev-ulixqg71ihyco2h1.us.auth0.com/");
         OAuth2TokenValidator<Jwt> audienceValidator = token -> {
             if (token.getAudience().contains(audience)) {

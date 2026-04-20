@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.bookworm.server.userbooks.entities.UserBook;
 
 public interface UserBookRepository extends JpaRepository<UserBook, Long> {
+    // Get all the books related to a user.
     List<UserBook> findAllByUserAuth0Id(String userAuth0Id);
 }
