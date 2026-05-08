@@ -35,7 +35,6 @@ public class UserBook {
     @Column(nullable = false)
     private ReadingStatus readingStatus;
 
-    // Constructors
     public UserBook() {
     }
 
@@ -45,7 +44,6 @@ public class UserBook {
         this.readingStatus = status;
     }
 
-    // Getters & Setters
     public Long getId() {
         return id;
     }
@@ -77,5 +75,4 @@ public class UserBook {
     public void setStatus(ReadingStatus status) {
         this.readingStatus = status;
     }
-
 }

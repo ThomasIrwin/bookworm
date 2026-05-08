@@ -22,7 +22,7 @@ import com.bookworm.server.books.repository.BookRepository;
 public class BookServiceTest {
 
     @Mock
-    private BookRepository mockBookRepository;
+    private BookRepository bookRepository;
 
     @InjectMocks
     private BookService bookService;
@@ -46,19 +46,26 @@ public class BookServiceTest {
     }
 
     @Test
-    void testGetAllBooks() {
+    void saveBook_bookSavesToRepository() {
+        bookService.saveBook(testBook1);
+
+        verify(bookRepository).save(testBook1);
+    }
+
+    @Test
+    void getAllBooks_returnsCorrectBooks() {
         List<Book> expectedBooks = Arrays.asList(testBook1, testBook2);
-        when(mockBookRepository.findAll()).thenReturn(expectedBooks);
+        when(bookRepository.findAll()).thenReturn(expectedBooks);
 
         List<Book> actualBooks = bookService.getAllBooks();
 
         assertThat(actualBooks).hasSize(2);
         assertThat(actualBooks).containsExactly(testBook1, testBook2);
-        verify(mockBookRepository).findAll();
+        verify(bookRepository).findAll();
     }
 
     @Test
-    void checkApplicationHealth() {
+    void checkApplicationHealth_returnsCorrectString() {
         String expected = "Application is healthy";
         String actual = bookService.checkApplicationHealth();
         assertEquals(expected, actual);

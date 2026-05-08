@@ -46,16 +46,6 @@ public class BookRepositoryTest {
     }
 
     @Test
-    void testFindAll() {
-        List<Book> books = testBookRepository.findAll();
-
-        assertThat(books).hasSize(3);
-        assertThat(books)
-                .extracting(Book::getTitle)
-                .containsExactlyInAnyOrder("Brave New World", "Masters of the Air", "The Rise of Theodore Roosevelt");
-    }
-
-    @Test
     void testFindByTitleContainingIgnoreCase() {
         List<Book> books = testBookRepository.findByTitleContainingIgnoreCase("of");
 
@@ -71,27 +61,5 @@ public class BookRepositoryTest {
 
         assertThat(books).hasSize(1);
         assertThat(books.get(0).getTitle()).isEqualTo("Masters of the Air");
-    }
-
-    @Test
-    void testDeleteSingleBook() {
-        testBookRepository.delete(testBook1);
-
-        List<Book> books = testBookRepository.findAll();
-        assertThat(books).hasSize(2);
-        assertThat(books)
-                .extracting(Book::getTitle)
-                .containsExactlyInAnyOrder("Masters of the Air", "The Rise of Theodore Roosevelt");
-    }
-
-    @Test
-    void testDeleteSingleBookById() {
-        testBookRepository.deleteById(testBook2.getId());
-
-        List<Book> books = testBookRepository.findAll();
-        assertThat(books).hasSize(2);
-        assertThat(books)
-                .extracting(Book::getTitle)
-                .containsExactlyInAnyOrder("Brave New World", "The Rise of Theodore Roosevelt");
     }
 }

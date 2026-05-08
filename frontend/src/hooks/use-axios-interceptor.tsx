@@ -8,9 +8,14 @@ export const useAxiosInterceptor = () => {
 
     useEffect(() => {
         const interceptor = api.interceptors.request.use(async (config) => {
-            const token = await getAccessTokenSilently();
-            config.headers.Authorization = `Bearer ${token}`;
-            return config;
+            try {
+                const token = await getAccessTokenSilently();
+                config.headers.Authorization = `Bearer ${token}`;
+                return config;
+            }
+            catch {
+                return config;
+            }
         });
 
         return () => api.interceptors.request.eject(interceptor);

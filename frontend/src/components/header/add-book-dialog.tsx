@@ -41,15 +41,17 @@ export default function AddBookDialog({ onBookAdded }: AddBookDialogProps) {
             readingStatus: readingStatus
         }
 
-        console.log(newBook);
         apiService.addBookToUserLibrary(newBook)
-            .then(response => {
-                console.log(response.data);
+            .then(() => {
                 onBookAdded();
             })
             .catch(error => {
                 console.error(error);
             })
+        setTitle('');
+        setAuthor('');
+        setDescription('');
+        setReadingStatus(ReadingStatus.WANT_TO_READ);
     }
 
     return (

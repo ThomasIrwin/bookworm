@@ -17,7 +17,6 @@ function Home() {
   const fetchUserLibrary = useCallback(() => {
     apiService.getUserBooks()
       .then(response => {
-        console.log(response.data);
         setUserBooks(response.data);
       })
       .catch(error => {
@@ -28,7 +27,6 @@ function Home() {
   const deleteUserBook = (userBookId: number) => {
     apiService.deleteUserBook(userBookId)
       .then(() => {
-        console.log("Delete successful: " + userBookId);
         fetchUserLibrary();
       })
       .catch(error => {
@@ -39,9 +37,6 @@ function Home() {
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
       apiService.sendUserDataToServer()
-        .then(response => {
-          console.log("User Logged In", response.data);
-        })
         .catch(error => {
           console.error(error);
         })

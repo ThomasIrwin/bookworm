@@ -1,4 +1,4 @@
-package com.bookworm.server.userbooks.exceptions;
+package com.bookworm.server.users.exceptions;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(String userAuthId) {
