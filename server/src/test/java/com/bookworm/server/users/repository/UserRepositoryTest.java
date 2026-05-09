@@ -2,6 +2,7 @@ package com.bookworm.server.users.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Optional;
 
@@ -13,7 +14,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.PostgreSQLContainer;
+
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import com.bookworm.server.users.entities.User;
 
@@ -21,7 +23,7 @@ import com.bookworm.server.users.entities.User;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class UserRepositoryTest {
 
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine");
+    static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:15-alpine");
 
     @BeforeAll
     static void beforeAll() {
@@ -54,33 +56,33 @@ class UserRepositoryTest {
         assertTrue(result.isPresent());
         assertEquals("auth0|abc", result.get().getAuth0Id());
     }
+
+    @Test
+    void findByAuth0Id_returnsEmptyWhenNotExists() {
+        Optional<User> result = userRepository.findByAuth0Id("auth0|doesnotexist");
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    void upsertUser_insertsNewUserAndReturnsNonZero() {
+        int result = userRepository.upsertUser("auth0|newuser");
+
+        assertEquals(1, result);
+        assertTrue(userRepository.findByAuth0Id("auth0|newuser").isPresent());
+    }
+
+    @Test
+    void upsertUser_doesNotDuplicateExistingUserAndReturnsZero() {
+        final String EXISTING_USER_AUTH0_ID = "auth0|existing";
+
+        userRepository.upsertUser(EXISTING_USER_AUTH0_ID);
+
+        int result = userRepository.upsertUser(EXISTING_USER_AUTH0_ID);
+
+        assertEquals(0, result);
+        assertEquals(1, userRepository.findAll().stream()
+                .filter(u -> EXISTING_USER_AUTH0_ID.equals(u.getAuth0Id()))
+                .count());
+    }
 }
-
-    // @Test
-    // void findByAuth0Id_returnsEmptyWhenNotExists() {
-    //     Optional<User> result = userRepository.findByAuth0Id("auth0|doesnotexist");
-
-    //     assertFalse(result.isPresent());
-    // }
-
-    // @Test
-    // void upsertUser_insertsNewUserAndReturnsNonZero() {
-    //     int result = userRepository.upsertUser("auth0|newuser");
-
-    //     assertEquals(1, result);
-    //     assertTrue(userRepository.findByAuth0Id("auth0|newuser").isPresent());
-    // }
-
-    // @Test
-    // void upsertUser_doesNotDuplicateExistingUserAndReturnsZero() {
-    //     final String EXISTING_USER_AUTH0_ID = "auth0|existing";
-
-    //     userRepository.upsertUser(EXISTING_USER_AUTH0_ID);
-
-    //     int result = userRepository.upsertUser(EXISTING_USER_AUTH0_ID);
-
-    //     assertEquals(0, result);
-    //     assertEquals(1, userRepository.findAll().stream()
-    //             .filter(u -> EXISTING_USER_AUTH0_ID.equals(u.getAuth0Id()))
-    //             .count());
-    // }
