@@ -25,4 +25,5 @@ volumes:
 
 networks:
   bookworm-network:
+    name: bookworm-network
     driver: bridge

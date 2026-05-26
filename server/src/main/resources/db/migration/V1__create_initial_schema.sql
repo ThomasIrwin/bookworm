@@ -1,0 +1,18 @@
+CREATE TABLE books (
+    id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    description VARCHAR(1000)
+);
+
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    auth0_id VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE user_books (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id),
+    book_id BIGINT NOT NULL REFERENCES books(id),
+    reading_status VARCHAR(50) NOT NULL
+);

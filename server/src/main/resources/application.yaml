@@ -2,19 +2,22 @@
 spring:
   application:
     name: server
+  config:
+    import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:postgresql://localhost:5432/bookworm
-    username: bookworm_dev
-    password: dev_pwd
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+    open-in-view: false
   security:
     oauth2:
       resourceserver:
@@ -25,4 +28,4 @@ spring:
 server:
   servlet:
     context-path: /api/v1
-  port: 8080
+  port: ${SERVER_DEV_PORT}

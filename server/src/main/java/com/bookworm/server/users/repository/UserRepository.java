@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Query(value = """
-            INSERT INTO users (auth0id) VALUES (:auth0Id) ON CONFLICT DO NOTHING
+            INSERT INTO users (auth0_id) VALUES (:auth0Id) ON CONFLICT DO NOTHING
             """, nativeQuery = true)
     int upsertUser(@Param("auth0Id") String auth0Id);
 }
