@@ -28,4 +28,4 @@ spring:
 server:
   servlet:
     context-path: /api/v1
-  port: ${SERVER_DEV_PORT}
+  port: ${SERVER_DEV_PORT:8080}
