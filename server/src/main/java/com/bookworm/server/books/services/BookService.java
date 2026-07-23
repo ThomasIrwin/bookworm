@@ -1,6 +1,7 @@
 package com.bookworm.server.books.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,10 @@ public class BookService {
         }
 
         bookRepository.save(book);
+    }
+
+    public Optional<Book> getBook(String title, String author) {
+        return bookRepository.findByTitleAndAuthor(title, author);
     }
 
     public List<Book> getAllBooks() {

@@ -1,5 +1,7 @@
 package com.bookworm.server.books.entities;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,6 +72,22 @@ public class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.title, this.author);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Book book = (Book) obj;
+
+        return this.title.equals(book.title) && this.author.equals(book.author);
     }
 
     @Override

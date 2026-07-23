@@ -3,6 +3,7 @@ package com.bookworm.server.books.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -87,5 +88,20 @@ public class BookRepositoryTest {
 
         assertThat(books).hasSize(1);
         assertThat(books.get(0).getTitle()).isEqualTo("Masters of the Air");
+    }
+
+    @Test
+    void testFindByTitleAndAuthor_bookExists() {
+        testEntityManager.clear();
+
+        Optional<Book> book = testBookRepository.findByTitleAndAuthor("Masters of the Air", "Donald Miller");
+        assertThat(book).isPresent();
+        assertThat(book.get()).isEqualTo(testBook2);
+    }
+
+    @Test
+    void testFindByTitleAndAuthor_bookNotFound() {
+        Optional<Book> book = testBookRepository.findByTitleAndAuthor("Doesn't exist", "John Doe");
+        assertThat(book).isNotPresent();
     }
 }
