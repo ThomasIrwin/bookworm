@@ -1,0 +1,358 @@
+<mxfile host="Electron" agent="bookworm-architecture" pages="3">
+  <diagram id="page-1-context" name="1 - System Context">
+    <mxGraphModel dx="1225" dy="848" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1150" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="b-client" parent="1" style="rounded=0;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;align=left;spacingLeft=10;fontStyle=2;fontColor=#666666;" value="Client (user&#39;s browser)" vertex="1">
+          <mxGeometry height="450" width="300" x="200" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="b-cloud" parent="1" style="rounded=0;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;align=left;spacingLeft=10;fontStyle=2;fontColor=#666666;" value="Deployment boundary&#xa;(today: Docker Compose on localhost / Ubuntu VM  |  planned: AWS)" vertex="1">
+          <mxGeometry height="800" width="700" x="560" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="b-ext" parent="1" style="rounded=0;html=1;dashed=1;fillColor=none;strokeColor=#999999;verticalAlign=top;align=left;spacingLeft=10;fontStyle=2;fontColor=#666666;" value="Third-party services" vertex="1">
+          <mxGeometry height="640" width="260" x="1310" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-reader" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Reader&#xa;(authenticated)" vertex="1">
+          <mxGeometry height="90" width="50" x="70" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-visitor" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;dashed=1;strokeColor=#999999;fontColor=#666666;" value="Visitor&#xa;(anonymous, reads&#xa;public notes)" vertex="1">
+          <mxGeometry height="90" width="50" x="70" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="spa" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Bookworm SPA&lt;/b&gt;&#xa;React 18 + TypeScript (Vite)&#xa;shadcn/ui + Tailwind&#xa;Renders library, book detail,&#xa;reading session UI" vertex="1">
+          <mxGeometry height="120" width="250" x="225" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-sdk" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;Auth0 React SDK&lt;/b&gt;&#xa;Login redirect (OIDC + PKCE),&#xa;token cache, useAuth0()" vertex="1">
+          <mxGeometry height="90" width="250" x="225" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="axios" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;API client&lt;/b&gt;&#xa;Axios + interceptor&#xa;(attaches Bearer JWT)" vertex="1">
+          <mxGeometry height="90" width="250" x="225" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="cdn" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;Static hosting&lt;/b&gt; (planned)&#xa;S3 bucket + CloudFront&#xa;serves built SPA bundle" vertex="1">
+          <mxGeometry height="90" width="240" x="600" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="api" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;spacingTop=8;" value="&lt;b&gt;Bookworm API&lt;/b&gt;&#xa;Spring Boot 3.5 / Java 21&#xa;OAuth2 Resource Server (JWT)&#xa;Layered: Controller → Service → Repository&#xa;Flyway migrations on startup&#xa;Actuator health endpoint&#xa;&#xa;Today: local JVM / container&#xa;Planned: ECS Fargate behind ALB" vertex="1">
+          <mxGeometry height="200" width="300" x="600" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="db" parent="1" style="shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=15;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="&lt;b&gt;PostgreSQL 15&lt;/b&gt;&#xa;container: bookworm-db&#xa;Planned: RDS" vertex="1">
+          <mxGeometry height="120" width="220" x="1000" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="etl" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;Catalogue ETL&lt;/b&gt; (planned)&#xa;Python job — fetch, normalise&#xa;and upsert book metadata.&#xa;Replaces user-facing book creation." vertex="1">
+          <mxGeometry height="110" width="300" x="600" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="secrets" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;Secrets Manager&lt;/b&gt; (planned)&#xa;replaces .env in prod" vertex="1">
+          <mxGeometry height="70" width="220" x="1000" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="obs" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;CloudWatch&lt;/b&gt; (planned)&#xa;logs + Actuator metrics" vertex="1">
+          <mxGeometry height="70" width="220" x="1000" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="auth0" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="&lt;b&gt;Auth0 tenant&lt;/b&gt;&#xa;Identity provider&#xa;issuer: dev-ulixqg71...&#xa;audience: bookworm API&#xa;Publishes JWKS" vertex="1">
+          <mxGeometry height="130" width="200" x="1340" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="bookapi" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;Book metadata source&lt;/b&gt;&#xa;(planned — decision needed)&#xa;Open Library / Google Books&#xa;/ ISBNdb" vertex="1">
+          <mxGeometry height="110" width="200" x="1340" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="ci" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="&lt;b&gt;GitHub Actions&lt;/b&gt;&#xa;.github/workflows/ci.yaml&#xa;build + JUnit/Testcontainers&#xa;Planned: deploy stage" vertex="1">
+          <mxGeometry height="110" width="250" x="225" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="actor-reader" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="spa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1l" connectable="0" parent="e1" style="edgeLabel;html=1;resizable=0;points=[];" value="uses (HTTPS)" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="actor-visitor" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;" target="spa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2l" connectable="0" parent="e2" style="edgeLabel;html=1;resizable=0;points=[];fontColor=#666666;" value="views public notes&#xa;(no token)" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="spa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="auth-sdk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="spa" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="axios">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="auth-sdk" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.75;" target="auth0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560.05" y="375.05" />
+              <mxPoint x="560.05" y="277.52" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5l" connectable="0" parent="e5" style="edgeLabel;html=1;resizable=0;points=[];" value="1. OIDC authorize redirect (PKCE)&#xa;2. returns ID token + access token (JWT)" vertex="1">
+          <mxGeometry relative="1" x="-0.3" y="-15" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="axios" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6l" connectable="0" parent="e6" style="edgeLabel;html=1;resizable=0;points=[];" value="REST / JSON&#xa;Authorization: Bearer &lt;JWT&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.15" y="-15" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.25;entryX=0;entryY=0.25;" target="auth0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="960.05" y="370" />
+              <mxPoint x="960.05" y="212.48" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7l" connectable="0" parent="e7" style="edgeLabel;html=1;resizable=0;points=[];" value="fetches JWKS,&#xa;validates sig / iss / aud" vertex="1">
+          <mxGeometry relative="1" x="0.2" y="-10" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8l" connectable="0" parent="e8" style="edgeLabel;html=1;resizable=0;points=[];" value="JDBC&#xa;(JPA + Flyway)" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="etl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=1;exitY=0.5;entryX=0.5;entryY=1;" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9l" connectable="0" parent="e9" style="edgeLabel;html=1;resizable=0;points=[];fontColor=#666666;" value="upsert catalogue rows" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="etl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=1;exitY=0.75;entryX=0;entryY=0.5;" target="bookapi">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10l" connectable="0" parent="e10" style="edgeLabel;html=1;resizable=0;points=[];fontColor=#666666;" value="fetch metadata" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=1;exitY=0.75;entryX=0;entryY=0.5;" target="secrets">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11l" connectable="0" parent="e11" style="edgeLabel;html=1;resizable=0;points=[];fontColor=#666666;" value="reads DB creds" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="api" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=0.75;exitY=1;entryX=0;entryY=0.5;" target="obs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12l" connectable="0" parent="e12" style="edgeLabel;html=1;resizable=0;points=[];fontColor=#666666;" value="logs / metrics" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="ci" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#9673a6;exitX=1;exitY=0.25;entryX=0;entryY=0.5;" target="etl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13l" connectable="0" parent="e13" style="edgeLabel;html=1;resizable=0;points=[];fontColor=#9673a6;" value="build, test, deploy (planned)" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="cdn" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" target="spa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14l" connectable="0" parent="e14" style="edgeLabel;html=1;resizable=0;points=[];fontColor=#666666;" value="serves bundle" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=20;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;" value="&lt;b&gt;Legend&lt;/b&gt;&#xa;&#xa;Solid fill  = exists in develop today&#xa;Dashed grey = planned / not yet built&#xa;Orange  = data store or third party&#xa;&#xa;Open question marked with ⚠" vertex="1">
+          <mxGeometry height="170" width="330" x="60" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="note-versioning" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=20;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;" value="⚠ &lt;b&gt;Decision:&lt;/b&gt; controllers currently map to /books, /users,&#xa;/userbooks — but the Auth0 audience is http://localhost:8080/api/v1.&#xa;Do you want a versioned base path (server.servlet.context-path&#xa;or an explicit /api/v1 prefix)? Cheap now, painful later." vertex="1">
+          <mxGeometry height="110" width="400" x="600" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="note-public" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=20;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;" value="⚠ &lt;b&gt;Decision:&lt;/b&gt; the &quot;public notes&quot; story introduces the first&#xa;&lt;i&gt;unauthenticated&lt;/i&gt; read path. Today SecurityConfig says&#xa;anyRequest().authenticated(). Public notes need their own&#xa;permitAll() matcher and a separate DTO that leaks no user data." vertex="1">
+          <mxGeometry height="110" width="420" x="1050" y="880" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-2-backend" name="2 - Backend Modules &amp; Layers">
+    <mxGraphModel dx="1715" dy="1187" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1150" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="band-edge" parent="1" style="rounded=0;html=1;fillColor=#f8f8f8;strokeColor=#cccccc;verticalAlign=middle;align=left;spacingLeft=10;fontStyle=1;fontColor=#666666;horizontal=1;" value="HTTP edge" vertex="1">
+          <mxGeometry height="110" width="1390" x="250" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="band-ctrl" parent="1" style="rounded=0;html=1;fillColor=#f8f8f8;strokeColor=#cccccc;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontColor=#666666;" value="Controllers — @RestController. HTTP only: bind, validate, delegate, map to DTO." vertex="1">
+          <mxGeometry height="160" width="1340" x="300" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="band-svc" parent="1" style="rounded=0;html=1;fillColor=#f8f8f8;strokeColor=#cccccc;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontColor=#666666;" value="Services — @Service. Business rules, @Transactional boundary, throws domain exceptions." vertex="1">
+          <mxGeometry height="160" width="1340" x="300" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="band-repo" parent="1" style="rounded=0;html=1;fillColor=#f8f8f8;strokeColor=#cccccc;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontColor=#666666;" value="Repositories — Spring Data JPA. Derived query methods; no business logic." vertex="1">
+          <mxGeometry height="150" width="1340" x="300" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="band-db" parent="1" style="rounded=0;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontColor=#7a5100;" value="PostgreSQL — schema owned by Flyway, ddl-auto: validate" vertex="1">
+          <mxGeometry height="90" width="1340" x="300" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="filter" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;Security filter chain&lt;/b&gt; (SecurityConfig)  →  JwtDecoder: verify signature via JWKS, issuer, audience  →  populates JwtAuthenticationToken  |  CORS (WebConfig)" vertex="1">
+          <mxGeometry height="60" width="1280" x="330" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c-user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;UserController&lt;/b&gt;&#xa;POST /users/me" vertex="1">
+          <mxGeometry height="90" width="190" x="330" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="c-book" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;BooksController&lt;/b&gt;&#xa;GET /books/&#xa;GET /books/health" vertex="1">
+          <mxGeometry height="90" width="190" x="540" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="c-ub" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="&lt;b&gt;UserBooksController&lt;/b&gt;&#xa;GET /userbooks/&#xa;POST /userbooks/add-book&#xa;DELETE /userbooks/{id}&#xa;⚠ + PATCH status &amp; page" vertex="1">
+          <mxGeometry height="100" width="190" x="750" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="c-session" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;ReadingSessionController&lt;/b&gt;&#xa;(planned)&#xa;POST /sessions/start&#xa;POST /sessions/{id}/stop&#xa;GET /sessions" vertex="1">
+          <mxGeometry height="100" width="190" x="960" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="c-note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;NoteController&lt;/b&gt; (planned)&#xa;CRUD /notes&#xa;PATCH /notes/{id}/visibility&#xa;GET /public/notes  ← no auth" vertex="1">
+          <mxGeometry height="100" width="190" x="1170" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="c-refl" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;ReflectionController&lt;/b&gt;&#xa;(planned)&#xa;GET /sessions/{id}/questions&#xa;POST /responses" vertex="1">
+          <mxGeometry height="100" width="190" x="1380" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="s-user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;UserService&lt;/b&gt;&#xa;upsert by auth0_id&#xa;(ON CONFLICT DO NOTHING)" vertex="1">
+          <mxGeometry height="90" width="190" x="330" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="s-book" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;BookService&lt;/b&gt;&#xa;find-or-create&#xa;Optional&lt;Book&gt; lookup" vertex="1">
+          <mxGeometry height="90" width="190" x="540" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="s-ub" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="&lt;b&gt;UserBooksService&lt;/b&gt;&#xa;ownership checks,&#xa;status transitions,&#xa;current page" vertex="1">
+          <mxGeometry height="90" width="190" x="750" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="s-session" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;ReadingSessionService&lt;/b&gt;&#xa;(planned) start/stop,&#xa;duration, pages/hour,&#xa;time-to-finish estimate" vertex="1">
+          <mxGeometry height="90" width="190" x="960" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="s-note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;NoteService&lt;/b&gt; (planned)&#xa;authorship + visibility&#xa;rules" vertex="1">
+          <mxGeometry height="90" width="190" x="1170" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="s-refl" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="&lt;b&gt;ReflectionService&lt;/b&gt;&#xa;(planned) selects questions&#xa;by genre / fiction flag,&#xa;stores responses" vertex="1">
+          <mxGeometry height="90" width="190" x="1380" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="UserRepository" vertex="1">
+          <mxGeometry height="70" width="190" x="330" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="r-book" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="BookRepository" vertex="1">
+          <mxGeometry height="70" width="190" x="540" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="r-ub" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="UserBookRepository" vertex="1">
+          <mxGeometry height="70" width="190" x="750" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="r-session" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="ReadingSessionRepository&#xa;(planned)" vertex="1">
+          <mxGeometry height="70" width="190" x="960" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="r-note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="NoteRepository&#xa;(planned)" vertex="1">
+          <mxGeometry height="70" width="190" x="1170" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="r-refl" parent="1" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#333333;" value="Question / Response&#xa;Repositories (planned)" vertex="1">
+          <mxGeometry height="70" width="190" x="1380" y="690" as="geometry" />
+        </mxCell>
+        <mxCell id="tables" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="users  |  books  |  user_books  |  reading_sessions (planned)  |  notes (planned)  |  questions + responses (planned)  |  genres (planned)" vertex="1">
+          <mxGeometry height="42" width="1280" x="330" y="862" as="geometry" />
+        </mxCell>
+        <mxCell id="cross" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" value="&lt;b&gt;Cross-cutting&lt;/b&gt;&#xa;&#xa;• GlobalExceptionHandler&#xa;   @ControllerAdvice — maps domain&#xa;   exceptions to HTTP status codes&#xa;&#xa;• SecurityConfig — JWT resource server&#xa;• WebConfig — CORS (⚠ lock down for prod)&#xa;• Flyway — versioned migrations&#xa;• Actuator — /actuator/health&#xa;• DTOs (records) at the controller edge&#xa;   so entities never cross the wire" vertex="1">
+          <mxGeometry height="360" width="230" x="40" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="rule" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=20;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;" value="&lt;b&gt;Architectural rule&lt;/b&gt;&#xa;&#xa;A service may call another&#xa;&lt;i&gt;service&lt;/i&gt;, never another&#xa;module&#39;s &lt;i&gt;repository&lt;/i&gt;.&#xa;&#xa;Keeps each module the sole&#xa;owner of its persistence,&#xa;so invariants live in exactly&#xa;one place." vertex="1">
+          <mxGeometry height="250" width="230" x="40" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="v1" edge="1" parent="1" source="c-user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="s-user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v2" edge="1" parent="1" source="c-book" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="s-book">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v3" edge="1" parent="1" source="c-ub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="s-ub">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v4" edge="1" parent="1" source="c-session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;" target="s-session">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v5" edge="1" parent="1" source="c-note" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;" target="s-note">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v6" edge="1" parent="1" source="c-refl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;" target="s-refl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v7" edge="1" parent="1" source="s-user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="r-user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v8" edge="1" parent="1" source="s-book" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="r-book">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v9" edge="1" parent="1" source="s-ub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;" target="r-ub">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v10" edge="1" parent="1" source="s-session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;" target="r-session">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v11" edge="1" parent="1" source="s-note" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;" target="r-note">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v12" edge="1" parent="1" source="s-refl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;" target="r-refl">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h1" edge="1" parent="1" source="s-ub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#82b366;startSize=6;fontSize=9;" target="s-book" value="uses">
+          <mxGeometry relative="1" y="-15" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="h2" edge="1" parent="1" source="s-ub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.25;exitY=1;entryX=0.75;entryY=1;strokeColor=#82b366;" target="s-user" value="uses">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h3" edge="1" parent="1" source="s-session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#999999;fontColor=#666666;fontSize=9;" target="s-ub" value="updates progress">
+          <mxGeometry relative="1" y="-15" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="h4" edge="1" parent="1" source="s-session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;exitX=1;exitY=0.25;entryX=0;entryY=0.25;strokeColor=#999999;fontColor=#666666;" target="s-refl" value="on session end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="page-3-data" name="3 - Data Model (draft + open questions)">
+    <mxGraphModel dx="1354" dy="937" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1150" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="t-users" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontFamily=Courier New;" value="&lt;b&gt;users&lt;/b&gt;  (V1 — exists)&#xa;&#xa;id            BIGSERIAL PK&#xa;auth0_id      VARCHAR(255) UNIQUE NOT NULL" vertex="1">
+          <mxGeometry height="120" width="330" x="60" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t-books" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontFamily=Courier New;" value="&lt;b&gt;books&lt;/b&gt;  (V1 — exists)&#xa;&#xa;id            BIGSERIAL PK&#xa;title         VARCHAR(255) NOT NULL&#xa;author        VARCHAR(255) NOT NULL&#xa;description   VARCHAR(1000)&#xa;&#xa;⚠ page_count needed for progress %&#xa;⚠ isbn / external_id needed for ETL upsert&#xa;⚠ is_fiction flag? or derive from genre?&#xa;⚠ UNIQUE (title, author) — or equals()/hashCode()?" vertex="1">
+          <mxGeometry height="250" width="400" x="620" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t-ub" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontFamily=Courier New;" value="&lt;b&gt;user_books&lt;/b&gt;  (V1 — exists, needs extending)&#xa;&#xa;id              BIGSERIAL PK&#xa;user_id         BIGINT FK → users&#xa;book_id         BIGINT FK → books&#xa;reading_status  VARCHAR(50) NOT NULL&#xa;&#xa;⚠ current_page      INT  (story 3)&#xa;⚠ started_at        TIMESTAMPTZ&#xa;⚠ finished_at       TIMESTAMPTZ&#xa;⚠ UNIQUE (user_id, book_id)?" vertex="1">
+          <mxGeometry height="250" width="400" x="60" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="t-session" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontFamily=Courier New;fontColor=#333333;" value="&lt;b&gt;reading_sessions&lt;/b&gt;  (planned — story 4)&#xa;&#xa;id              BIGSERIAL PK&#xa;user_book_id    BIGINT FK → user_books&#xa;started_at      TIMESTAMPTZ NOT NULL&#xa;ended_at        TIMESTAMPTZ&#xa;start_page      INT&#xa;end_page        INT&#xa;&#xa;⚠ store duration, or always derive it?&#xa;⚠ how do you handle an abandoned session&#xa;   (started, never stopped)?" vertex="1">
+          <mxGeometry height="270" width="400" x="60" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="t-notes" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontFamily=Courier New;fontColor=#333333;" value="&lt;b&gt;notes&lt;/b&gt;  (planned — stories 6 &amp; 7)&#xa;&#xa;id              BIGSERIAL PK&#xa;user_book_id    BIGINT FK → user_books&#xa;session_id      BIGINT FK → reading_sessions (nullable?)&#xa;body            TEXT NOT NULL&#xa;page            INT&#xa;is_public       BOOLEAN NOT NULL DEFAULT false&#xa;created_at      TIMESTAMPTZ&#xa;&#xa;⚠ attach to user_book, or to session, or both?&#xa;⚠ separate &quot;quote&quot; type vs free note?" vertex="1">
+          <mxGeometry height="270" width="440" x="560" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="t-genres" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontFamily=Courier New;fontColor=#333333;" value="&lt;b&gt;genres&lt;/b&gt; + &lt;b&gt;book_genres&lt;/b&gt;  (planned)&#xa;&#xa;genres(id, name, is_fiction)&#xa;book_genres(book_id, genre_id)  ← many-to-many&#xa;&#xa;⚠ a book with 2 genres matches 2 question sets.&#xa;   Which wins? Options: primary_genre column,&#xa;   priority/weight on genres, union then sample N,&#xa;   or scope questions to fiction/non-fiction only." vertex="1">
+          <mxGeometry height="230" width="440" x="1100" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="t-questions" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontFamily=Courier New;fontColor=#333333;" value="&lt;b&gt;questions&lt;/b&gt;  (planned — story 5)&#xa;&#xa;id              BIGSERIAL PK&#xa;text            TEXT NOT NULL&#xa;scope           VARCHAR  (GLOBAL | FICTION | NONFICTION | GENRE)&#xa;genre_id        BIGINT FK → genres (nullable)&#xa;&#xa;⚠ system-authored only for now;&#xa;   community submission + voting is a later phase&#xa;   — leave columns out until you need them." vertex="1">
+          <mxGeometry height="240" width="440" x="1100" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="t-responses" parent="1" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;fontFamily=Courier New;fontColor=#333333;" value="&lt;b&gt;question_responses&lt;/b&gt;  (planned — story 5)&#xa;&#xa;id              BIGSERIAL PK&#xa;question_id     BIGINT FK → questions&#xa;session_id      BIGINT FK → reading_sessions&#xa;body            TEXT&#xa;created_at      TIMESTAMPTZ&#xa;&#xa;⚠ open question you flagged earlier: one response&#xa;   table with nullable FKs, or separate tables per&#xa;   context? Nullable FKs are simpler but let the DB&#xa;   accept rows that make no sense — a CHECK&#xa;   constraint can close that gap." vertex="1">
+          <mxGeometry height="270" width="440" x="1100" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="r1" edge="1" parent="1" source="t-users" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0.25;exitY=1;entryX=0.25;entryY=0;" target="t-ub" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r2" edge="1" parent="1" source="t-books" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;exitX=0;exitY=0.75;entryX=1;entryY=0.25;" target="t-ub" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r3" edge="1" parent="1" source="t-ub" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=0.25;exitY=1;entryX=0.25;entryY=0;" target="t-session" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r4" edge="1" parent="1" source="t-session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="t-notes" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r5" edge="1" parent="1" source="t-session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=1;exitY=0.25;entryX=0;entryY=0.5;" target="t-responses" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r6" edge="1" parent="1" source="t-questions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="t-responses" value="1 : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r7" edge="1" parent="1" source="t-genres" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="t-books" value="M : N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r8" edge="1" parent="1" source="t-questions" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#999999;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="t-genres" value="scopes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note-draft" parent="1" style="shape=note;whiteSpace=wrap;html=1;size=20;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;" value="&lt;b&gt;This page is a starting point, not a design.&lt;/b&gt;&#xa;&#xa;Solid boxes are what V1__create_initial_schema.sql&#xa;actually creates today. Dashed boxes are my reading of&#xa;your user stories — they are deliberately incomplete.&#xa;&#xa;Every ⚠ is a decision that belongs to you. Work through&#xa;them before writing V2, because migrations are cheap&#xa;to write and expensive to undo once data exists." vertex="1">
+          <mxGeometry height="200" width="440" x="480" y="380" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
