@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ develop, demo-start, demo-fixed ]
   pull_request:
     branches: [ main ]
 
@@ -26,4 +26,4 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/bookworm
           SPRING_DATASOURCE_USERNAME: bookworm_dev
           SPRING_DATASOURCE_PASSWORD: dev_pwd
-        run: ./mvnw test
+        run: ./mvnw clean test
