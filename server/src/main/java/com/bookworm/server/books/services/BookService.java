@@ -23,7 +23,8 @@ public class BookService {
             throw new NullBookException();
         }
 
-        return bookRepository.save(book);
+        return bookRepository.findByIsbn(book.getIsbn())
+                .orElseGet(() -> bookRepository.save(book));
     }
 
     public Optional<Book> getBook(String title, String author) {

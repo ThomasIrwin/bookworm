@@ -12,5 +12,7 @@ import com.bookworm.server.books.entities.Book;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByTitleContainingIgnoreCase(String title);
 
+    Optional<Book> findByIsbn(String isbn);
+
     Optional<Book> findByTitleAndAuthor(String title, String author);
 }
