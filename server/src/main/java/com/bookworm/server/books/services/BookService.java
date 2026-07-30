@@ -18,14 +18,12 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    // TODO: Remove once ETL pipelines are in place.
-    // Book creation is temporarily user-facing until the database is populated.
-    public void saveBook(Book book) {
+    public Book saveBook(Book book) {
         if (book == null) {
             throw new NullBookException();
         }
 
-        bookRepository.save(book);
+        return bookRepository.save(book);
     }
 
     public Optional<Book> getBook(String title, String author) {

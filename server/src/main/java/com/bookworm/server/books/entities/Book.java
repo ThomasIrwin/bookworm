@@ -19,6 +19,9 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String isbn;
+
     @NotBlank(message = "Title is required")
     @Size(max = 255)
     @Column(nullable = false)
@@ -36,7 +39,8 @@ public class Book {
     public Book() {
     }
 
-    public Book(String title, String author, String description) {
+    public Book(String isbn, String title, String author, String description) {
+        this.isbn = isbn;
         this.title = title;
         this.author = author;
         this.description = description;
@@ -48,6 +52,10 @@ public class Book {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getIsbn() {
+        return this.isbn;
     }
 
     public String getTitle() {
@@ -87,7 +95,7 @@ public class Book {
             return false;
         Book book = (Book) obj;
 
-        return this.title.equals(book.title) && this.author.equals(book.author);
+        return this.isbn.equals(book.isbn);
     }
 
     @Override

@@ -72,7 +72,7 @@ class UserBooksControllerTest {
 
         @Test
         void addBookToUserLibrary_returns200WithUpdatedList() throws Exception {
-                AddBookRequest request = new AddBookRequest("Clean Code", "Robert Martin", "A coding book",
+                AddBookRequest request = new AddBookRequest("123", "Clean Code", "Robert Martin", "A coding book",
                                 ReadingStatus.IN_PROGRESS);
                 UserBookDTO dto = new UserBookDTO(1L, "Clean Code", "Robert Martin", "A coding book", "Reading");
 
@@ -90,7 +90,7 @@ class UserBooksControllerTest {
 
         @Test
         void addBookToUserLibrary_returns404WhenUserNotFound() throws Exception {
-                AddBookRequest request = new AddBookRequest("Clean Code", "Robert Martin", "A coding book",
+                AddBookRequest request = new AddBookRequest("123", "Clean Code", "Robert Martin", "A coding book",
                                 ReadingStatus.IN_PROGRESS);
 
                 when(userBooksService.addBookToUserLibrary(any(AddBookRequest.class),

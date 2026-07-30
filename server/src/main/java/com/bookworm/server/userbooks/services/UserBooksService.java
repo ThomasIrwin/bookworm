@@ -1,7 +1,6 @@
 package com.bookworm.server.userbooks.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -47,17 +46,13 @@ public class UserBooksService {
         return userBookList;
     }
 
-    public List<UserBookDTO> addBookToUserLibrary(AddBookRequest book, String userAuth0Id) {
+    public List<UserBookDTO> addBookToUserLibrary(AddBookRequest bookReq, String userAuth0Id) {
         User currentUser = userService.getUser(userAuth0Id);
 
-        Optional<Book> newBook = bookService.getBook(book.title(), book.author());
-        if (newBook.isEmpty()) {
-            newBook = Optional.of(new Book(book.title(), book.author(), book.description()));
-            bookService.saveBook(newBook.get());
-        }
+        Book savedBook = bookService
+                .saveBook(new Book(bookReq.isbn(), bookReq.title(), bookReq.author(), bookReq.description()));
 
-        UserBook newUserBook = new UserBook(currentUser, newBook.get(),
-                book.readingStatus());
+        UserBook newUserBook = new UserBook(currentUser, savedBook, bookReq.readingStatus());
         userBookRepo.save(newUserBook);
 
         return getAllUserBooks(userAuth0Id);
