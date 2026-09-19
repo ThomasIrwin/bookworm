@@ -1,0 +1,60 @@
+[project]
+name = "bookworm-server"
+version = "0.0.1"
+description = "A Personal Library Assistant"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi>=0.115.6",
+    "uvicorn[standard]>=0.34.0",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30.0",
+    "alembic>=1.14.0",
+    "pydantic>=2.11.0",
+    "pydantic-settings>=2.7.0",
+    "pyjwt[crypto]>=2.10.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+    "pytest-asyncio>=0.25.0",
+    "pytest-cov>=6.0.0",
+    "httpx>=0.28.1",
+    "testcontainers[postgres]>=4.9.0",
+    "ruff>=0.8.4",
+    "mypy>=1.14.0",
+]
+
+[tool.uv]
+package = false # deployable application, not a distributable library
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM", "ASYNC", "C4", "RUF"]
+ignore = ["B008"] # FastAPI Depends() in argument defaults
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "tests"]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+strict = true
+warn_unreachable = true
+disallow_untyped_decorators = false
+files = ["app"]
+
+[[tool.mypy.overrides]]
+module = ["testcontainers.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+addopts = "-q --strict-markers"
+markers = ["integration: requires Docker (testcontainers PostgreSQL)"]

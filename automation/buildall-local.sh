@@ -34,9 +34,9 @@ start_db() {
 # --- Server Startup --- #
 start_server() {
     log "Running tests..."
-    (cd $SERVER_DIR && ./mvnw test)
+    (cd $SERVER_DIR && uv sync --locked --all-groups && uv run pytest)
 
-    log "Building JAR..."
+    log "Building server image..."
     (cd $SERVER_DIR && docker build -t "$SERVER_IMG_NAME" .)
 
     log "Starting server container..."

@@ -4,26 +4,40 @@ on:
   push:
     branches: [ develop ]
   pull_request:
-    branches: [ main ]
+    types: [ opened, synchronize, reopened ]
+    branches: [ main, develop ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: server
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
         with:
-          java-version: 21
-          distribution: 'temurin'
-          cache: 'maven'
+          version: "0.12.13"
+          enable-cache: true
+          cache-dependency-glob: server/uv.lock
+
+      - name: Install dependencies
+        run: uv sync --locked --all-groups
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Type check
+        run: uv run mypy app
+
+      # Integration tests start PostgreSQL through Testcontainers using the runner's Docker.
       - name: Run tests
-        working-directory: server
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/bookworm
-          SPRING_DATASOURCE_USERNAME: bookworm_dev
-          SPRING_DATASOURCE_PASSWORD: dev_pwd
-        run: ./mvnw test
+        run: uv run pytest
