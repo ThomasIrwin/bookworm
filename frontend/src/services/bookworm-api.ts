@@ -19,8 +19,8 @@ export const apiService = {
 
     // userbooks
     getUserBooks: () => api.get("/userbooks/"),
-    addBookToUserLibrary: (book: AddBookRequest) => api.post('userbooks/add-book', book),
-    deleteUserBook: (bookId: number) => api.delete(`userbooks/delete-book/${bookId}`)
+    addBookToUserLibrary: (book: AddBookRequest) => api.post('/userbooks/add-book', book),
+    deleteUserBook: (bookId: number) => api.delete(`/userbooks/delete-book/${bookId}`)
 }
 
 export default api;

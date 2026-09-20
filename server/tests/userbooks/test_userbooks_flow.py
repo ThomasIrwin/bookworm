@@ -108,7 +108,7 @@ async def test_adding_a_book_for_an_unregistered_user_is_404_and_persists_nothin
     )
 
     assert response.status_code == 404
-    assert response.content == b""
+    assert response.json() == {"detail": "User not found"}
     assert await count(connection, "SELECT count(*) FROM books WHERE title = 'Ghost Story'") == 0
 
 
@@ -121,7 +121,7 @@ async def test_failed_user_book_insert_rolls_back_the_new_book(
     response = await client.post("/userbooks/add-book", json={"title": "Orphan", "author": "A"})
 
     assert response.status_code == 500
-    assert response.content == b""
+    assert response.json() == {"detail": "Internal Server Error"}
     assert await count(connection, "SELECT count(*) FROM books WHERE title = 'Orphan'") == 0
 
 
@@ -152,7 +152,7 @@ async def test_deleting_books_enforces_ownership(
     await register(client, authenticate, BOB)
     forbidden = await client.delete(f"/userbooks/delete-book/{user_book_id}")
     assert forbidden.status_code == 403
-    assert forbidden.content == b""
+    assert forbidden.json() == {"detail": "Forbidden"}
 
     authenticate(ALICE)
     deleted = await client.delete(f"/userbooks/delete-book/{user_book_id}")

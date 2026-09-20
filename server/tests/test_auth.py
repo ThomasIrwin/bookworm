@@ -13,9 +13,11 @@ import jwt
 import pytest
 from cryptography.hazmat.primitives.asymmetric import rsa
 from httpx import AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth import dependencies
 from app.config import get_settings
+from app.database import get_session
 from app.userbooks.service import UserBooksService, get_user_books_service
 
 RFC6750 = 'error_uri="https://tools.ietf.org/html/rfc6750#section-3.1"'
@@ -101,7 +103,7 @@ async def test_secured_routes_return_401_without_token(
     response = await client.request(method, path)
 
     assert response.status_code == 401
-    assert response.content == b""
+    assert response.json() == {"detail": "Unauthorized"}
     assert response.headers["www-authenticate"] == "Bearer"
 
 
@@ -123,7 +125,7 @@ async def test_malformed_token_is_rejected_without_fetching_keys(client: AsyncCl
     response = await client.get("/userbooks/", headers=bearer("abc.def.ghi"))
 
     assert response.status_code == 401
-    assert response.content == b""
+    assert response.json() == {"detail": "Unauthorized"}
     assert response.headers["www-authenticate"] == MALFORMED_TOKEN_CHALLENGE
 
 
@@ -131,6 +133,17 @@ async def test_bearer_scheme_is_case_insensitive(client: AsyncClient) -> None:
     response = await client.get("/userbooks/", headers={"Authorization": "bearer abc.def.ghi"})
 
     assert response.headers["www-authenticate"] == MALFORMED_TOKEN_CHALLENGE
+
+
+async def test_malformed_body_without_token_is_a_validation_error(client: AsyncClient) -> None:
+    """FastAPI reads and JSON-decodes the body before running the route's auth dependency, so a
+    malformed body is always a validation error regardless of whether a token was sent.
+    """
+    response = await client.post(
+        "/userbooks/add-book", content=b"{not json", headers={"Content-Type": "application/json"}
+    )
+
+    assert response.status_code == 422
 
 
 # --- Token validation ------------------------------------------------------------------------
@@ -191,7 +204,7 @@ async def test_invalid_claims_are_rejected(
     response = await client.get("/userbooks/", headers=bearer(make_token(**claims)))
 
     assert response.status_code == 401
-    assert response.content == b""
+    assert response.json() == {"detail": "Unauthorized"}
     assert f'error_description="{description}"' in response.headers["www-authenticate"]
 
 
@@ -240,12 +253,20 @@ async def test_unreachable_jwks_is_rejected(
 # --- Public routes ---------------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("path", ["/books/health", "/actuator/health"])
-async def test_public_routes_reject_an_invalid_bearer_token(client: AsyncClient, path: str) -> None:
-    response = await client.get(path, headers=bearer("abc.def.ghi"))
+async def test_books_health_ignores_an_invalid_bearer_token(client: AsyncClient) -> None:
+    response = await client.get("/books/health", headers=bearer("abc.def.ghi"))
 
-    assert response.status_code == 401
-    assert response.headers["www-authenticate"] == MALFORMED_TOKEN_CHALLENGE
+    assert response.status_code == 200
+
+
+async def test_actuator_health_ignores_an_invalid_bearer_token(
+    client: AsyncClient, override: Callable[[Callable[..., Any], Any], None]
+) -> None:
+    override(get_session, create_autospec(AsyncSession, instance=True))
+
+    response = await client.get("/actuator/health", headers=bearer("abc.def.ghi"))
+
+    assert response.status_code == 200
 
 
 async def test_public_route_ignores_non_bearer_credentials(client: AsyncClient) -> None:
@@ -263,17 +284,18 @@ async def test_public_route_accepts_a_valid_bearer_token(
     assert response.status_code == 200
 
 
-# --- Unrouted paths: Spring authenticated before dispatch -------------------------------------
+# --- Unrouted paths: auth only ever runs on routes that declare it ----------------------------
 
 
 @pytest.mark.parametrize("path", ["/nonexistent", "/books", "/books/health/", "/actuator"])
-async def test_unrouted_secured_path_returns_401_without_token(
+async def test_unrouted_path_is_not_found_regardless_of_token(
     client: AsyncClient, path: str
 ) -> None:
-    response = await client.get(path)
+    without_token = await client.get(path)
+    with_bad_token = await client.get(path, headers=bearer("abc.def.ghi"))
 
-    assert response.status_code == 401
-    assert response.headers["www-authenticate"] == "Bearer"
+    assert without_token.status_code == 404
+    assert with_bad_token.status_code == 404
 
 
 @pytest.mark.usefixtures("jwks")
@@ -283,7 +305,7 @@ async def test_unrouted_path_returns_404_with_valid_token(
     response = await client.get("/nonexistent", headers=bearer(make_token()))
 
     assert response.status_code == 404
-    assert response.content == b""
+    assert response.json() == {"detail": "Not Found"}
 
 
 async def test_unrouted_path_outside_the_api_prefix_does_not_require_auth(
