@@ -46,7 +46,6 @@ def _make_test_app() -> FastAPI:
 
 @pytest.fixture
 async def client() -> AsyncIterator[AsyncClient]:
-    # The default transport re-raises unhandled exceptions, so a 500 proves the catch-all ran.
     transport = ASGITransport(app=_make_test_app())
     async with AsyncClient(transport=transport, base_url="http://localhost") as c:
         yield c
@@ -58,7 +57,7 @@ async def test_handle_user_not_found_returns_404_when_user_not_found_exception_t
     response = await client.get("/test/user-not-found")
 
     assert response.status_code == 404
-    assert response.content == b""
+    assert response.json() == {"detail": "User not found"}
 
 
 async def test_handle_user_book_not_found_returns_404_when_user_book_not_found_exception_thrown(
@@ -67,7 +66,7 @@ async def test_handle_user_book_not_found_returns_404_when_user_book_not_found_e
     response = await client.get("/test/user-book-not-found")
 
     assert response.status_code == 404
-    assert response.content == b""
+    assert response.json() == {"detail": "User book not found"}
 
 
 async def test_handle_unauthorized_user_book_access_returns_403_when_exception_thrown(
@@ -76,7 +75,7 @@ async def test_handle_unauthorized_user_book_access_returns_403_when_exception_t
     response = await client.get("/test/unauthorized-user-book-access")
 
     assert response.status_code == 403
-    assert response.content == b""
+    assert response.json() == {"detail": "Forbidden"}
 
 
 async def test_handle_no_resource_found_returns_404_when_no_resource_found_exception_thrown(
@@ -85,7 +84,7 @@ async def test_handle_no_resource_found_returns_404_when_no_resource_found_excep
     response = await client.get("/test/no-resource-found")
 
     assert response.status_code == 404
-    assert response.content == b""
+    assert response.json() == {"detail": "Not Found"}
 
 
 async def test_handle_generic_exception_throws_500_when_generic_exception_thrown(
@@ -94,4 +93,4 @@ async def test_handle_generic_exception_throws_500_when_generic_exception_thrown
     response = await client.get("/test/generic-exception")
 
     assert response.status_code == 500
-    assert response.content == b""
+    assert response.json() == {"detail": "Internal Server Error"}

@@ -1,6 +1,5 @@
-"""Auth0 JWT resource-server authentication. Mirrors config/SecurityConfig.java."""
+"""Auth0 JWT resource-server authentication."""
 
-import inspect
 import logging
 import re
 from functools import lru_cache
@@ -17,14 +16,8 @@ logger = logging.getLogger(__name__)
 
 _RFC6750_URI: Final = "https://tools.ietf.org/html/rfc6750#section-3.1"
 
-# Spring Security's DefaultBearerTokenResolver pattern, matched case-insensitively.
+# Matched case-insensitively, per RFC 6750's bearer-token charset.
 _BEARER_PATTERN: Final = re.compile(r"Bearer (?P<token>[a-zA-Z0-9\-._~+/]+=*)", re.IGNORECASE)
-
-
-def public_paths() -> frozenset[str]:
-    """Paths permitted to all callers. Every other path under the API prefix is secured."""
-    prefix = get_settings().api_prefix
-    return frozenset({f"{prefix}/books/health", f"{prefix}/actuator/health"})
 
 
 def _unauthorized(challenge: str = "Bearer") -> HTTPException:
@@ -110,27 +103,6 @@ async def get_current_auth0_id(token: Annotated[str | None, Depends(bearer_token
     if token is None:
         raise _unauthorized()
     return await verify_bearer_token(token)
-
-
-async def authenticate_if_bearer_present(
-    token: Annotated[str | None, Depends(bearer_token)],
-) -> None:
-    """For public routes: Spring still rejects an invalid bearer token sent to a permitAll path."""
-    if token is not None:
-        await verify_bearer_token(token)
-
-
-async def authenticate_request(request: Request) -> str:
-    """Authenticate outside dependency injection, e.g. for requests that matched no route.
-
-    Honours app.dependency_overrides so tests that substitute get_current_auth0_id behave the same
-    on unrouted paths as on routed ones.
-    """
-    override = request.app.dependency_overrides.get(get_current_auth0_id)
-    if override is not None:
-        result = override()
-        return str(await result) if inspect.isawaitable(result) else str(result)
-    return await get_current_auth0_id(resolve_bearer_token(request))
 
 
 CurrentAuth0Id = Annotated[str, Depends(get_current_auth0_id)]

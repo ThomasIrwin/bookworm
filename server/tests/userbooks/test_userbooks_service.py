@@ -190,8 +190,9 @@ async def test_add_book_to_user_library_does_not_commit_when_user_not_found(
 
     user_service.get_user.side_effect = UserNotFoundError("auth0|123")
 
+    request = AddBookRequest(title="Clean Code", author="Robert Martin")
     with pytest.raises(UserNotFoundError):
-        await user_books_service.add_book_to_user_library(AddBookRequest(), "auth0|123")
+        await user_books_service.add_book_to_user_library(request, "auth0|123")
 
     book_service.save_book.assert_not_awaited()
     session.commit.assert_not_awaited()

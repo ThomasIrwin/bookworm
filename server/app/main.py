@@ -1,4 +1,4 @@
-"""Application factory. Mirrors ServerApplication.java and config/WebConfig.java.
+"""Application factory.
 
 Run with: uvicorn --factory app.main:create_app
 """
@@ -8,6 +8,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.books.router import router as books_router
 from app.config import get_settings
@@ -16,7 +17,6 @@ from app.exceptions.handlers import register_exception_handlers
 from app.health.router import router as health_router
 from app.middleware import (
     CatchAllExceptionMiddleware,
-    CorsMiddleware,
     HeadAsGetMiddleware,
     SecurityHeadersMiddleware,
 )
@@ -42,7 +42,7 @@ def create_app() -> FastAPI:
         description="A Personal Library Assistant",
         version="0.0.1",
         lifespan=lifespan,
-        # Spring matches /books/ literally and does not redirect /books.
+        # Paths are matched literally: /books/ and /books are distinct, no redirect between them.
         redirect_slashes=False,
         openapi_url=f"{settings.api_prefix}/openapi.json" if docs_enabled else None,
         docs_url=f"{settings.api_prefix}/docs" if docs_enabled else None,
@@ -61,13 +61,15 @@ def create_app() -> FastAPI:
     register_exception_handlers(app)
 
     # The last middleware added is outermost: security headers wrap CORS, which wraps the 500
-    # catch-all, so even error and preflight responses carry both.
+    # catch-all, which wraps HEAD handling, so even a crash, a CORS-rejected preflight, and a HEAD
+    # response all carry the outer two.
     app.add_middleware(HeadAsGetMiddleware)
     app.add_middleware(CatchAllExceptionMiddleware)
     app.add_middleware(
-        CorsMiddleware,
-        allowed_origins=settings.cors_allowed_origins,
-        allowed_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        CORSMiddleware,
+        allow_origins=settings.cors_allowed_origins,
+        allow_methods=["GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type"],
         allow_credentials=True,
         max_age=1800,
     )

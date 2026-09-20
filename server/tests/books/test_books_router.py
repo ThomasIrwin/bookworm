@@ -72,4 +72,4 @@ async def test_when_non_existant_endpoint_called_returns_not_found(
     response = await auth_client.get("/nonexistent")
 
     assert response.status_code == 404
-    assert response.content == b""
+    assert response.json() == {"detail": "Not Found"}

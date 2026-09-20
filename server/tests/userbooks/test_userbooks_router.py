@@ -110,7 +110,18 @@ async def test_add_book_to_user_library_returns_404_when_user_not_found(
     response = await auth_client.post("/userbooks/add-book", json=_add_book_request_json())
 
     assert response.status_code == 404
-    assert response.content == b""
+    assert response.json() == {"detail": "User not found"}
+
+
+async def test_add_book_without_title_is_a_validation_error(
+    auth_client: AsyncClient, user_books_service: MagicMock
+) -> None:
+    response = await auth_client.post(
+        "/userbooks/add-book", json={"author": "Robert Martin", "readingStatus": "IN_PROGRESS"}
+    )
+
+    assert response.status_code == 422
+    user_books_service.add_book_to_user_library.assert_not_awaited()
 
 
 # --- DELETE /userbooks/delete-book/{userBookId} ---
@@ -128,6 +139,15 @@ async def test_delete_book_from_user_library_returns_204_when_successful(
     user_books_service.delete_book_from_user_library.assert_awaited_once_with(1, AUTH0_ID)
 
 
+async def test_delete_book_with_a_non_integer_id_is_a_validation_error(
+    auth_client: AsyncClient, user_books_service: MagicMock
+) -> None:
+    response = await auth_client.delete("/userbooks/delete-book/abc")
+
+    assert response.status_code == 422
+    user_books_service.delete_book_from_user_library.assert_not_awaited()
+
+
 async def test_delete_book_from_user_library_returns_404_when_book_not_found(
     auth_client: AsyncClient, user_books_service: MagicMock
 ) -> None:
@@ -136,7 +156,7 @@ async def test_delete_book_from_user_library_returns_404_when_book_not_found(
     response = await auth_client.delete("/userbooks/delete-book/99")
 
     assert response.status_code == 404
-    assert response.content == b""
+    assert response.json() == {"detail": "User book not found"}
 
 
 async def test_delete_book_from_user_library_returns_403_when_user_does_not_own_book(
@@ -149,4 +169,4 @@ async def test_delete_book_from_user_library_returns_403_when_user_does_not_own_
     response = await auth_client.delete("/userbooks/delete-book/1")
 
     assert response.status_code == 403
-    assert response.content == b""
+    assert response.json() == {"detail": "Forbidden"}
